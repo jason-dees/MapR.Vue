@@ -1,29 +1,5 @@
-# src
+[MapR](https://mapr.jdees.now.sh)
 
-## Project setup
-```
-npm install
-```
+[Mapr Example](https://mapr.jdees.now.sh/#/games/KR0ACE)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+But now i need to move away from azure functions probably!
