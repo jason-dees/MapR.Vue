@@ -9,24 +9,24 @@
   },
   "dependencies": {
     "@aspnet/signalr": "^1.1.4",
-    "axios": "^0.19.0",
-    "core-js": "^2.6.5",
-    "panzoom": "^8.1.2",
-    "vue": "^2.6.10",
-    "vue-router": "^3.0.6"
+    "axios": "^0.19.2",
+    "core-js": "^2.6.11",
+    "panzoom": "^8.7.5",
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
-    "babel-eslint": "^10.0.1",
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-service": "^4.1.2",
+    "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "expose-loader": "^0.7.5",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^7.1.0",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^7.3.1",
     "style-loader": "^0.23.1",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
@@ -37,7 +37,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "off",
+      "no-unused-vars": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
