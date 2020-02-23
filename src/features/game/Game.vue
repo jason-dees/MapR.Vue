@@ -88,8 +88,7 @@ export default {
   },
   watch: {
     markers: function(){
-      let self = this;
-      
+      this.mapload();
     }
   }
 }
