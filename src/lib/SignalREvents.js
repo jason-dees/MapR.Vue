@@ -5,7 +5,7 @@ import config from '../../config.json';
 
 let signalREvents = {
     SetGameData: {
-        name: "setGameData",
+        name: "SetGameData",
         fn: function(gameData){
             var markers = gameData.markers;
             console.log("triggering SetGameData", gameData);
@@ -35,8 +35,7 @@ let SetUpSignalREvents = (connection) => {
 };
 
 let SetUpSignalR = (gameId) => {
-    let connection; 
-    connection = new signalR.HubConnectionBuilder()
+    let connection = new signalR.HubConnectionBuilder()
         .withUrl(config.mapRFunctionsUrl + 'api/')
         .configureLogging(signalR.LogLevel.Trace)
         .build();
@@ -44,6 +43,8 @@ let SetUpSignalR = (gameId) => {
     connection.start().then(function () { 
         SetUpSignalREvents(connection);
         store.addToGame(gameId)
+    }).catch(function (error) {
+        console.error(error.message);
     });
     // mapRFunctions.negotiateSignalr().then(resp => {
     //     let con = resp.data;

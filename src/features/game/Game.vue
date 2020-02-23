@@ -62,7 +62,7 @@ export default {
           self.setMarkerPosition(self.markers[marker], self.mapZoom, self.map);
         }
     });
-    if(self.store.state.game.isGameOwner){
+    if(self.store.state.game.isOwner){
       setUpMarkerDrag(document.querySelector("#mapVue"), self);
     }
   },
@@ -87,6 +87,10 @@ export default {
     }
   },
   watch: {
+    markers: function(){
+      let self = this;
+      
+    }
   }
 }
 function setUpMarkerDrag(container, mapRApp){
