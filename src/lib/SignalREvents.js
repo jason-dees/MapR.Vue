@@ -1,10 +1,13 @@
 import { store } from './store.js'
+import * as signalR from '@aspnet/signalr';
+import mapRFunctions from './MapRFunctions.js'
+import config from '../../config.json';
+
 let signalREvents = {
     SetGameData: {
-        name: "SetGameData",
+        name: "setGameData",
         fn: function(gameData){
             var markers = gameData.markers;
-
             console.log("triggering SetGameData", gameData);
 
             store.resetGame();
@@ -29,6 +32,26 @@ let SetUpSignalREvents = (connection) => {
 
     connection.on(signalREvents.SetGameAdmin.name, 
         signalREvents.SetGameAdmin.fn);
-}
+};
 
-export { SetUpSignalREvents };
+let SetUpSignalR = (gameId) => {
+    let connection; 
+    connection = new signalR.HubConnectionBuilder()
+        .withUrl(config.mapRFunctionsUrl + 'api/')
+        .configureLogging(signalR.LogLevel.Trace)
+        .build();
+
+    connection.start().then(function () { 
+        SetUpSignalREvents(connection);
+        store.addToGame(gameId)
+    });
+    // mapRFunctions.negotiateSignalr().then(resp => {
+    //     let con = resp.data;
+    //     const options = {
+    //         accessTokenFactory: () => con.accessToken
+    //     };
+        
+    // });
+};
+
+export { SetUpSignalR, SetUpSignalREvents };

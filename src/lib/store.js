@@ -21,6 +21,7 @@ var store = {
     getUser(){
         var self = this;
         mapRFunctions.getUser().then((r) => {
+            console.log(r);
             if(r.data.name != null){
                 self.setUser(r.data.name);
                 self.state.loadedUserInfo = true;
@@ -29,10 +30,10 @@ var store = {
                 self.state.user = null;
                 self.state.loadedUserInfo = false;
             }
-        }).catch(() => {
+        }).catch((r) => {
             self.state.user = null;
             self.state.loadedUserInfo = false;
-        }).finally(() => {
+        }).finally((r) => {
             self.state.loadingUserInfo = false;
         });
     },

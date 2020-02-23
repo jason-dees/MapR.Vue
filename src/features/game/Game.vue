@@ -13,7 +13,7 @@
 <script>
 import * as signalR from '@aspnet/signalr';
 import mapRFunctions from '../../lib/MapRFunctions.js'
-import {SetUpSignalREvents} from '../../lib/SignalREvents.js'
+import {SetUpSignalR} from '../../lib/SignalREvents.js'
 import config from '../../../config.json';
 import { store } from '../../lib/store.js'
 import * as panzoom from 'panzoom';
@@ -58,7 +58,6 @@ export default {
         minZoom: .1
     });
     self.mapZoom.on('transform', function(){
-        //$('.marker').popover('hide');
         for (var marker in self.markers) {
           self.setMarkerPosition(self.markers[marker], self.mapZoom, self.map);
         }
@@ -73,27 +72,7 @@ export default {
       self.mapZoom.moveTo(0,0);
     },
     connect: function(gameId){
-      let self = this;
-      
-      let connection;// = store.getSignalRConnection(); 
-
-      mapRFunctions.negotiateSignalr().then(resp => {
-        let con = resp.data;
-        const options = {
-            accessTokenFactory: () => con.accessToken
-        };
-        connection = new signalR.HubConnectionBuilder()
-          .withUrl(con.url, options)
-          .configureLogging(signalR.LogLevel.Debug)
-          .build();
-        console.log(SetUpSignalREvents);
-        SetUpSignalREvents(connection);
-        
-        connection.start()
-          .then(function () { 
-            self.store.addToGame(gameId)
-        });
-      });
+      SetUpSignalR(gameId);
     },
     setMarkerPosition: function(marker, mapZoom, mapElement) {
         var mapTransform = mapZoom.getTransform();
