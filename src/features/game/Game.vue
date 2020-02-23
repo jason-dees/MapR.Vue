@@ -1,7 +1,7 @@
 <template>
   <div id="mapVue">
     <div class="mapContainer">
-      <img v-bind:src="imageUrl" class="map"/>
+      <img v-bind:src="imageUrl" class="map" v-on:load="mapload" />
     </div>
     <map-marker 
         v-for="marker in markers"
@@ -13,8 +13,9 @@
 <script>
 import * as signalR from '@aspnet/signalr';
 import mapRFunctions from '../../lib/MapRFunctions.js'
+import {SetUpSignalREvents} from '../../lib/SignalREvents.js'
 import config from '../../../config.json';
-import { store } from '../shared/store.js'
+import { store } from '../../lib/store.js'
 import * as panzoom from 'panzoom';
 import MapMarker from './MapMarker.vue';
 
@@ -62,10 +63,15 @@ export default {
           self.setMarkerPosition(self.markers[marker], self.mapZoom, self.map);
         }
     });
-
-    setUpMarkerDrag(document.querySelector("#mapVue"), self);
+    if(self.store.state.game.isGameOwner){
+      setUpMarkerDrag(document.querySelector("#mapVue"), self);
+    }
   },
   methods:{
+    mapload: function(){
+      var self = this;
+      self.mapZoom.moveTo(0,0);
+    },
     connect: function(gameId){
       let self = this;
       
@@ -80,31 +86,14 @@ export default {
           .withUrl(con.url, options)
           .configureLogging(signalR.LogLevel.Debug)
           .build();
+        console.log(SetUpSignalREvents);
+        SetUpSignalREvents(connection);
         
-        connection.on("SetGameData", function(gameData){
-          var markers = gameData.markers;
-          self.store.resetGame();
-          self.store.setIsGameOwner(gameData.isGameOwner);
-          for(var i = 0; i< markers.length; i++){
-            self.addMarker(markers[i]);
-          }
-        });
-        connection.on("SetGameAdmin", function(data){
-          console.log(data);
-        });
-
         connection.start()
           .then(function () { 
             self.store.addToGame(gameId)
         });
       });
-    },
-    addMarker: function(marker){
-        var self = this;
-        self.store.addMarker(marker, self.mapZoom, this.map);
-        this.$nextTick(function () {
-          self.setMarkerPosition(marker, self.mapZoom, self.map);
-        })
     },
     setMarkerPosition: function(marker, mapZoom, mapElement) {
         var mapTransform = mapZoom.getTransform();

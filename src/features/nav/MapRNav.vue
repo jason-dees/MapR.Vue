@@ -40,7 +40,7 @@
     </nav> 
 </template>
 <script>
-import {store} from '../shared/store.js'
+import { store } from '../../lib/store.js'
 export default{
     name: 'MapRNav',
     props: {

@@ -13,7 +13,7 @@
 
 <script>
 import MapRNav from '../nav/MapRNav.vue'
-import {store} from '../shared/store.js'
+import { store } from '../../lib/store.js'
 const config = require('../../../config.json')
 
 export default {

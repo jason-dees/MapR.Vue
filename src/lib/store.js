@@ -1,4 +1,4 @@
-import mapRFunctions from '../../lib/MapRFunctions.js'
+import mapRFunctions from './MapRFunctions.js'
 
 var store = {
     state: {
@@ -21,8 +21,14 @@ var store = {
     getUser(){
         var self = this;
         mapRFunctions.getUser().then((r) => {
-            self.setUser(r.data.name);
-            self.state.loadedUserInfo = true;
+            if(r.data.name != null){
+                self.setUser(r.data.name);
+                self.state.loadedUserInfo = true;
+            }
+            else{
+                self.state.user = null;
+                self.state.loadedUserInfo = false;
+            }
         }).catch(() => {
             self.state.user = null;
             self.state.loadedUserInfo = false;
