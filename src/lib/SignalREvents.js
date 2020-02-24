@@ -10,8 +10,7 @@ let signalREvents = {
             var markers = gameData.markers;
             console.log("triggering SetGameData", gameData);
 
-            store.resetGame();
-            store.setIsGameOwner(gameData.isGameOwner);
+            store.setIsOwner(gameData.isGameOwner);
 
             for(var i = 0; i< markers.length; i++){
                 store.addMarker(markers[i]);
@@ -27,10 +26,10 @@ let signalREvents = {
 }
 
 let SetUpSignalREvents = (connection) => {
-    connection.on(signalREvents.SetGameData.name, 
+    connection.on(signalREvents.SetGameData.name,
         signalREvents.SetGameData.fn);
 
-    connection.on(signalREvents.SetGameAdmin.name, 
+    connection.on(signalREvents.SetGameAdmin.name,
         signalREvents.SetGameAdmin.fn);
 };
 
@@ -40,19 +39,12 @@ let SetUpSignalR = (gameId) => {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    connection.start().then(function () { 
+    connection.start().then(async function () {
         SetUpSignalREvents(connection);
-        store.addToGame(gameId)
+        await store.addToGame(gameId);
     }).catch(function (error) {
         console.error(error.message);
     });
-    // mapRFunctions.negotiateSignalr().then(resp => {
-    //     let con = resp.data;
-    //     const options = {
-    //         accessTokenFactory: () => con.accessToken
-    //     };
-        
-    // });
 };
 
 export { SetUpSignalR, SetUpSignalREvents };

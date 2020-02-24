@@ -1,21 +1,38 @@
 <template>
-    <nav class="navbar">
-        <div class="nav-wrapper">
-            <ul class="left">
-                <li>
-                    <router-link to="/">Home</router-link>
+    <nav class="navbar navbar-expand-lg">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <router-link to="/" class="nav-link">Home</router-link>
                 </li>
-                <li>
-                    <router-link to="/games">Games</router-link>
+                <li class="nav-item">
+                    <router-link to="/games" class="nav-link">Games</router-link>
+                </li>
+                <li class="nav-item dropdown" v-if="sharedState.isOwner">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#newMapModal">+</button>
+                        <div class="btn-group" role="group">
+                            <button id="mapGroupDropdown" type="button" class="btn btn-primary dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Change Map
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="mapGroupDropdown">
+                                    <span class="dropdown-item"
+                                        v-for="map in sharedState.game.maps"
+                                        v-bind:key="map.id"
+                                        v-on:click="changeMap(map.id)"
+                                        v-bind:class="{ active: map.isPrimary }">
+                                        {{map.name}}
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
-            <ul class="left" v-if="sharedState.game.isOwner">
-                <li>game menu stuff</li>
-            </ul>
-            <span class="title">
+
+            <span class="title mr-auto">
                 {{sharedState.title}}
             </span>
-            <ul class="right" v-if="!sharedState.loadedUserInfo && !sharedState.loadingUserInfo">
+            <ul class="right navbar-nav mr-auto" v-if="!sharedState.loadedUserInfo && !sharedState.loadingUserInfo">
                 <li>
                     <span>
                         Login with a provider
@@ -25,19 +42,18 @@
                     <a  href="#" v-on:click.prevent="googleLogin">google</a>
                 </li>
             </ul>
-            <span class="right" v-else-if="sharedState.loadingUserInfo">Loading User</span>
-            <ul class="right" v-else>
-                <li>
-                    <span v-if="sharedState.loadedUserInfo">
+            <span class=" mr-0" v-else-if="sharedState.loadingUserInfo">Loading User</span>
+            <ul class="navbar-nav mr-0" v-else>
+                <li class="nav-item">
+                    <span v-if="sharedState.loadedUserInfo" class="nav-link">
                         {{sharedState.user}}
                     </span>
                 </li>
-                <li>
-                    <a v-bind:href="functionsUrl+'api/logout'">logout</a>
+                <li class="nav-item">
+                    <a v-bind:href="functionsUrl+'api/logout'" class="nav-link">logout</a>
                 </li>
             </ul>
-        </div>
-    </nav> 
+    </nav>
 </template>
 <script>
 import { store } from '../../lib/store.js'
@@ -56,6 +72,9 @@ export default{
     methods: {
         googleLogin: function(){
             window.location.href = this.googleUrl;
+        },
+        changeMap: function(mapId){
+
         }
     }
 }
@@ -63,40 +82,7 @@ export default{
 <style lang="scss" scoped>
     @import '../shared/variables.scss';
     .navbar{
-        position:fixed;
-        width:100%;
-        top:0px;
+        background-color:$papyrus;
         z-index:1000;
-        position:fixed;
-        width:100%;
-        .nav-wrapper{
-            padding-top: 0px;
-            background-color:$papyrus;
-            height:$menu-height;
-            text-align: center;
-            ul {
-                margin:0px;
-                list-style: none;
-                li {
-                    display: inline-block;
-                    * {
-                        -webkit-transition: background-color .3s;
-                        transition: background-color .3s;
-                        font-size: 1rem;
-                        color: $link-color;
-                        display: block;
-                        padding:15px;
-                        text-decoration: none; 
-                    }
-                    a:hover{
-                        background-color:$papyrus-dark;
-                        cursor: pointer;
-                    }
-                    span {
-                        color: black;
-                    }
-                }
-            }
-        }
     }
 </style>

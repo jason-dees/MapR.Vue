@@ -10,18 +10,21 @@ const getInstance = function(){
 
 export default {
     async getUser(){
-       return await getInstance().get('user');
-    }, 
+       return await getInstance().get(`user`);
+    },
     async getGames(){
-       return await getInstance().get('/games');
+       return await getInstance().get(`/games`);
     },
     async getGame(gameId){
-       return await getInstance().get('games/' + gameId);
+       return await getInstance().get(`games/${gameId}`);
     },
     async negotiateSignalr(){
        return await getInstance().get('negotiate');
     },
     async addToGame(gameId){
         return await getInstance().post('AddToGame', {gameId});
+    },
+    async getMaps(gameId){
+        return await getInstance().get(`games/${gameId}/maps`);
     }
 }

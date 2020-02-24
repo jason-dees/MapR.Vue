@@ -3,7 +3,7 @@
     <div class="mapContainer">
       <img v-bind:src="imageUrl" class="map" v-on:load="mapload" />
     </div>
-    <map-marker 
+    <map-marker
         v-for="marker in markers"
         v-bind:key="marker.Id"
         v-bind:marker="marker" />
@@ -12,7 +12,6 @@
 
 <script>
 import * as signalR from '@aspnet/signalr';
-import mapRFunctions from '../../lib/MapRFunctions.js'
 import {SetUpSignalR} from '../../lib/SignalREvents.js'
 import config from '../../../config.json';
 import { store } from '../../lib/store.js'
@@ -29,22 +28,19 @@ export default {
   },
   data: function(){
     let self = this;
-    mapRFunctions.getGame(self.id).then(r => {
-      self.$set(self, 'game', r.data);
-      self.$set(self, 'imageUrl', config.mapRFunctionsUrl + 'api/games/'+ self.game.id + '/activemap/image');
-      store.setPageTitle(self.game.name);
-      self.connect(self.game.id);
+    store.getGameData(self.id).then(d => {
+      self.$set(self, 'imageUrl', config.mapRFunctionsUrl + 'api/games/'+ d.id + '/activemap/image');
+      self.connect(d.id);
     });
     return {
       store: store,
-      game: null,
       imageUrl: '',
       mapZoom: null
     };
   },
   computed:{
     map: function(){
-      return this.$el.querySelector('.map'); 
+      return this.$el.querySelector('.map');
     },
     markers: function(){
       return this.store.state.game.markers;
@@ -135,13 +131,13 @@ function setUpMarkerDrag(container, mapRApp){
                 mapRApp.markers[dragItem.id].x = (inElementX - mapTransform.x - mapRApp.map.offsetLeft)/mapTransform.scale;
                 mapRApp.markers[dragItem.id].y = (inElementY - mapTransform.y - mapRApp.map.offsetTop)/mapTransform.scale;
                 //THIS NEEDS TO BE FIXED PROBABLY
-                mapRApp.connection.invoke("MoveMarker", 
-                  dragItem.id, 
-                  mapRApp.markers[dragItem.id].x, 
+                mapRApp.connection.invoke("MoveMarker",
+                  dragItem.id,
+                  mapRApp.markers[dragItem.id].x,
                   mapRApp.markers[dragItem.id].y);
 
                 active = false;
-                
+
             }
         }
 

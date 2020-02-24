@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Index from './features/index/Index.vue'
 import Game from './features/game/Game.vue'
 import Games from './features/games/Games.vue'
-
+import 'bootstrap';
 Vue.config.productionTip = false
 
 Vue.use(VueRouter);

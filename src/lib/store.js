@@ -7,9 +7,14 @@ var store = {
         loadedUserInfo: false,
         loadingUserInfo: true,
         connection: null,
+        isOwner: false,
+        //I need to model this game stuff better
+        //Here i care about 'markers' for plebs
+        //I care about markers and maps for owners
         game:{
             markers: {},
-            isOwner: false
+            maps: {},
+            gameData: null
         }
     },
     setPageTitle  (newTitle){
@@ -21,7 +26,6 @@ var store = {
     getUser(){
         var self = this;
         mapRFunctions.getUser().then((r) => {
-            console.log(r);
             if(r.data.name != null){
                 self.setUser(r.data.name);
                 self.state.loadedUserInfo = true;
@@ -37,19 +41,30 @@ var store = {
             self.state.loadingUserInfo = false;
         });
     },
+    async getGameData(gameId){
+        var gameData = (await mapRFunctions.getGame(gameId)).data;
+        this.setPageTitle(gameData.name);
+        this.state.game.maps = gameData.maps;
+        return gameData;
+    },
     addToGame(gameId){
         return mapRFunctions.addToGame(gameId);
     },
-    setIsGameOwner(isGameOwner){
-        this.state.game.isOwner = isGameOwner;
+    setGameData(data){
+        this.state.game.gameData = data;
+    },
+    setIsOwner(isOwner){
+        this.state.isOwner = isOwner;
     },
     addMarker(marker){
         this.state.game.markers[marker.Id] = marker;
     },
     resetGame(){
+        console.log("resetGame");
+        this.setIsOwner(false);
         this.state.game = {
             markers: {},
-            isOwner: false
+            gameData: null
         };
     },
     clearMarkers(){
