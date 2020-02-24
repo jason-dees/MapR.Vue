@@ -1,94 +1,100 @@
 <template>
-  <div id="mapVue">
-    <div class="mapContainer">
-      <img v-bind:src="imageUrl" class="map" v-on:load="mapload" />
+    <div id="mapVue">
+        <div class="mapContainer">
+            <img v-bind:src="imageUrl" class="map" v-on:load="mapload" />
+        </div>
+        <map-marker
+            v-for="marker in state.game.markersArray"
+            v-bind:key="marker.Id"
+            v-bind:marker="marker" />
     </div>
-    <map-marker
-        v-for="marker in markers"
-        v-bind:key="marker.Id"
-        v-bind:marker="marker" />
-  </div>
 </template>
 
 <script>
-import * as signalR from '@aspnet/signalr';
-import {SetUpSignalR} from '../../lib/SignalREvents.js'
-import config from '../../../config.json';
-import { store } from '../../lib/store.js'
-import * as panzoom from 'panzoom';
-import MapMarker from './MapMarker.vue';
+    import * as signalR from '@aspnet/signalr';
+    import {SetUpSignalR} from '../../lib/SignalREvents.js'
+    import config from '../../../config.json';
+    import { store } from '../../lib/store.js'
+    import * as panzoom from 'panzoom';
+    import MapMarker from './MapMarker.vue';
 
-export default {
-  name: 'Game',
-  props:{
-    id: String
-  },
-  components: {
-    'map-marker': MapMarker
-  },
-  data: function(){
-    let self = this;
-    store.getGameData(self.id).then(d => {
-      self.$set(self, 'imageUrl', config.mapRFunctionsUrl + 'api/games/'+ d.id + '/activemap/image');
-      self.connect(d.id);
-    });
-    return {
-      store: store,
-      imageUrl: '',
-      mapZoom: null
-    };
-  },
-  computed:{
-    map: function(){
-      return this.$el.querySelector('.map');
-    },
-    markers: function(){
-      return this.store.state.game.markers;
-    }
-  },
-  mounted: function(){
-    var self = this;
-    self.mapZoom = panzoom(self.map,{
-        maxZoom: 1,
-        smoothScroll: false,
-        minZoom: .1
-    });
-    self.mapZoom.on('transform', function(){
-        for (var marker in self.markers) {
-          self.setMarkerPosition(self.markers[marker], self.mapZoom, self.map);
+    export default {
+        name: 'Game',
+        props:{
+            id: String
+        },
+        components: {
+            'map-marker': MapMarker
+        },
+        data: function(){
+            let self = this;
+            return {
+                store: store,
+                state: store.state,
+                imageUrl: '',
+                mapZoom: null,
+            };
+        },
+        computed:{
+            map: function(){
+                return this.$el.querySelector('.map');
+            },
+        },
+        mounted: function(){
+            var self = this;
+            self.store.resetGame();
+            self.mapZoom = panzoom(self.map,{
+                maxZoom: 1,
+                smoothScroll: false,
+                minZoom: .1
+            });
+            self.mapZoom.on('transform', function(){
+                var markers = self.state.game.markers;
+                for (var marker in markers) {
+                    self.setMarkerPosition(markers[marker], self.mapZoom, self.map);
+                }
+            });
+            this.store.getGameData(self.id).then(async d => {
+                self.$set(self, 'imageUrl', config.mapRFunctionsUrl + 'api/games/'+ d.id + '/activemap/image');
+                await self.connect(d.id);
+            });
+        },
+        methods:{
+            mapload: function(){
+                console.log("map load")
+                var self = this;
+                self.setMarkersPosition(self.mapZoom, self.map);
+            },
+            connect: async function(gameId){
+                var self = this;
+                await SetUpSignalR(gameId);
+                if(self.state.isOwner){
+                    setUpMarkerDrag(document.querySelector("#mapVue"), self);
+                }
+            },
+            setMarkersPosition: function(mapZoom, mapElement) {
+                var self = this;
+                var markers = self.state.game.markers;
+                for (var marker in markers) {
+                    self.setMarkerPosition(markers[marker], self.mapZoom, self.map);
+                }
+            },
+            setMarkerPosition: function(marker, mapZoom, mapElement) {
+                var mapTransform = mapZoom.getTransform();
+                var element = this.$el.querySelector('#' + marker.Id);
+                var markerX = marker.X,
+                markerY = marker.Y,
+                left = mapTransform.scale * markerX + mapTransform.x + mapElement.offsetLeft,
+                top = mapTransform.scale * markerY + mapTransform.y + mapElement.offsetTop;
+
+                var transformValue = 'matrix(' + mapTransform.scale + ',0, 0, ' + mapTransform.scale + ', '+ left + ', ' + top + ')';
+                element.style.transform = transformValue;
+            }
+        },
+        watch: {
         }
-    });
-    if(self.store.state.game.isOwner){
-      setUpMarkerDrag(document.querySelector("#mapVue"), self);
     }
-  },
-  methods:{
-    mapload: function(){
-      var self = this;
-      self.mapZoom.moveTo(0,0);
-    },
-    connect: function(gameId){
-      SetUpSignalR(gameId);
-    },
-    setMarkerPosition: function(marker, mapZoom, mapElement) {
-        var mapTransform = mapZoom.getTransform();
-        var element = this.$el.querySelector('#' + marker.Id);
-        var markerX = marker.X,
-            markerY = marker.Y,
-            left = mapTransform.scale * markerX + mapTransform.x + mapElement.offsetLeft,
-            top = mapTransform.scale * markerY + mapTransform.y + mapElement.offsetTop;
-
-        var transformValue = 'matrix(' + mapTransform.scale + ',0, 0, ' + mapTransform.scale + ', '+ left + ', ' + top + ')';
-        element.style.transform = transformValue;
-    }
-  },
-  watch: {
-    markers: function(){
-      this.mapload();
-    }
-  }
-}
-function setUpMarkerDrag(container, mapRApp){
+    function setUpMarkerDrag(container, mapRApp){
         let dragItem;
 
         let active = false;
@@ -112,7 +118,6 @@ function setUpMarkerDrag(container, mapRApp){
                 if (e.type === "touchstart") {
                     inElementX = 0;
                     inElementY = 0;
-
                 } else {
                     inElementX = e.layerX;
                     inElementY = e.layerY;
@@ -128,13 +133,13 @@ function setUpMarkerDrag(container, mapRApp){
                 inElementX = currentX;
                 inElementY = currentY;
 
-                mapRApp.markers[dragItem.id].x = (inElementX - mapTransform.x - mapRApp.map.offsetLeft)/mapTransform.scale;
-                mapRApp.markers[dragItem.id].y = (inElementY - mapTransform.y - mapRApp.map.offsetTop)/mapTransform.scale;
-                //THIS NEEDS TO BE FIXED PROBABLY
-                mapRApp.connection.invoke("MoveMarker",
-                  dragItem.id,
-                  mapRApp.markers[dragItem.id].x,
-                  mapRApp.markers[dragItem.id].y);
+                // mapRApp.markers[dragItem.id].x = (inElementX - mapTransform.x - mapRApp.map.offsetLeft)/mapTransform.scale;
+                // mapRApp.markers[dragItem.id].y = (inElementY - mapTransform.y - mapRApp.map.offsetTop)/mapTransform.scale;
+                // //THIS NEEDS TO BE FIXED PROBABLY
+                // mapRApp.connection.invoke("MoveMarker",
+                //   dragItem.id,
+                //   mapRApp.markers[dragItem.id].x,
+                //   mapRApp.markers[dragItem.id].y);
 
                 active = false;
 
@@ -162,5 +167,4 @@ function setUpMarkerDrag(container, mapRApp){
             el.style.transform = transformValue;
         }
     }
-
 </script>

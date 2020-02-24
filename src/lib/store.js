@@ -1,5 +1,10 @@
 import mapRFunctions from './MapRFunctions.js'
-
+var defaultGame = {
+    markers: {},
+    markersArray: [],
+    maps: {},
+    gameData: null
+};
 var store = {
     state: {
         title: 'MapR',
@@ -8,14 +13,7 @@ var store = {
         loadingUserInfo: true,
         connection: null,
         isOwner: false,
-        //I need to model this game stuff better
-        //Here i care about 'markers' for plebs
-        //I care about markers and maps for owners
-        game:{
-            markers: {},
-            maps: {},
-            gameData: null
-        }
+        game: defaultGame
     },
     setPageTitle  (newTitle){
         this.state.title = newTitle;
@@ -56,18 +54,29 @@ var store = {
     setIsOwner(isOwner){
         this.state.isOwner = isOwner;
     },
-    addMarker(marker){
+    addOrUpdateMarker(marker){
+        console.log("adding marker", marker);
+        if(this.state.game.markers[marker.Id] == null){
+            //I need to update this somehow
+            this.state.game.markersArray.push(marker);
+        }
+        else{
+            for(var i = 0; i < this.state.game.markersArray.length; i++){
+                if(this.state.game.markersArray[i].Id == marker.Id){
+                    this.state.game.markersArray[i] = marker;
+                    break;
+                }
+            }
+        }
         this.state.game.markers[marker.Id] = marker;
     },
     resetGame(){
         console.log("resetGame");
         this.setIsOwner(false);
-        this.state.game = {
-            markers: {},
-            gameData: null
-        };
+        this.state.game = defaultGame;
     },
     clearMarkers(){
+        console.log("clearing markers")
         this.state.game.markers = {};
     },
     isOnGamePage(){

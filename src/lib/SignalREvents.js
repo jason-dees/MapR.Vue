@@ -1,6 +1,5 @@
 import { store } from './store.js'
 import * as signalR from '@aspnet/signalr';
-import mapRFunctions from './MapRFunctions.js'
 import config from '../../config.json';
 
 let signalREvents = {
@@ -13,7 +12,7 @@ let signalREvents = {
             store.setIsOwner(gameData.isGameOwner);
 
             for(var i = 0; i< markers.length; i++){
-                store.addMarker(markers[i]);
+                store.addOrUpdateMarker(markers[i]);
             }
         }
     },
@@ -26,25 +25,24 @@ let signalREvents = {
 }
 
 let SetUpSignalREvents = (connection) => {
+    connection.off(signalREvents.SetGameData.name);
     connection.on(signalREvents.SetGameData.name,
         signalREvents.SetGameData.fn);
 
+    connection.off(signalREvents.SetGameAdmin.name);
     connection.on(signalREvents.SetGameAdmin.name,
         signalREvents.SetGameAdmin.fn);
 };
 
-let SetUpSignalR = (gameId) => {
+let SetUpSignalR = async (gameId) => {
     let connection = new signalR.HubConnectionBuilder()
         .withUrl(config.mapRFunctionsUrl + 'api/')
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    connection.start().then(async function () {
-        SetUpSignalREvents(connection);
-        await store.addToGame(gameId);
-    }).catch(function (error) {
-        console.error(error.message);
-    });
+    await connection.start();
+    SetUpSignalREvents(connection);
+    await store.addToGame(gameId);
 };
 
 export { SetUpSignalR, SetUpSignalREvents };
