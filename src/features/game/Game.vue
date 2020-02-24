@@ -132,17 +132,18 @@
             if(active){
                 inElementX = currentX;
                 inElementY = currentY;
+                var marker = mapRApp.state.game.markers[dragItem.id];
 
-                // mapRApp.markers[dragItem.id].x = (inElementX - mapTransform.x - mapRApp.map.offsetLeft)/mapTransform.scale;
-                // mapRApp.markers[dragItem.id].y = (inElementY - mapTransform.y - mapRApp.map.offsetTop)/mapTransform.scale;
+                marker.X = (inElementX - mapTransform.x - mapRApp.map.offsetLeft)/mapTransform.scale;
+                marker.Y = (inElementY - mapTransform.y - mapRApp.map.offsetTop)/mapTransform.scale;
                 // //THIS NEEDS TO BE FIXED PROBABLY
                 // mapRApp.connection.invoke("MoveMarker",
                 //   dragItem.id,
                 //   mapRApp.markers[dragItem.id].x,
                 //   mapRApp.markers[dragItem.id].y);
+                mapRApp.store.addOrUpdateMarker(marker);
 
                 active = false;
-
             }
         }
 

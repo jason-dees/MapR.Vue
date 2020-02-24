@@ -56,19 +56,13 @@ var store = {
     },
     addOrUpdateMarker(marker){
         console.log("adding marker", marker);
-        if(this.state.game.markers[marker.Id] == null){
-            //I need to update this somehow
-            this.state.game.markersArray.push(marker);
-        }
-        else{
-            for(var i = 0; i < this.state.game.markersArray.length; i++){
-                if(this.state.game.markersArray[i].Id == marker.Id){
-                    this.state.game.markersArray[i] = marker;
-                    break;
-                }
-            }
-        }
         this.state.game.markers[marker.Id] = marker;
+        this.state.game.markersArray = [];
+
+        //Keeping these in line will suck
+        for(var markerId in this.state.game.markers){
+            this.state.game.markersArray.push(this.state.game.markers[markerId]);
+        }
     },
     resetGame(){
         console.log("resetGame");
