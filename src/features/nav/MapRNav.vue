@@ -72,7 +72,7 @@ export default{
     data: function(){
         return {
             sharedState: store.state,
-            googleUrl: `${this.functionsUrl}.auth/login/google?post_login_redirect_url=${encodeURIComponent(window.location.href)}`
+            googleUrl: `${this.functionsUrl}account/googleLogin?redirect=${encodeURIComponent(window.location.href)}`
         };
     },
     methods: {

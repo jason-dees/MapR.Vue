@@ -3,14 +3,14 @@ import config from '../../config.json';
 
 const getInstance = function(){
     return axios.create({
-        baseURL: config.mapRFunctionsUrl + 'api/',
+        baseURL: config.mapRApi,
         withCredentials: true
     });
 }
 
 export default {
     async getUser(){
-       return await getInstance().get(`user`);
+       return await getInstance().get(`/account/user`);
     },
     async getGames(){
        return await getInstance().get(`/games`);

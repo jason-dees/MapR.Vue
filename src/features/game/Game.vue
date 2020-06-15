@@ -55,7 +55,7 @@
                 }
             });
             this.store.getGameData(self.id).then(async d => {
-                self.$set(self, 'imageUrl', config.mapRFunctionsUrl + 'api/games/'+ d.id + '/activemap/image');
+                self.$set(self, 'imageUrl', config.mapRApi + 'games/'+ d.id + '/activemap/image');
                 await self.connect(d.id);
             });
         },

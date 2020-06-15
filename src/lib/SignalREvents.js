@@ -36,7 +36,7 @@ let SetUpSignalREvents = (connection) => {
 
 let SetUpSignalR = async (gameId) => {
     let connection = new signalR.HubConnectionBuilder()
-        .withUrl(config.mapRFunctionsUrl + 'api/')
+        .withUrl(config.mapRApi)
         .configureLogging(signalR.LogLevel.Information)
         .build();
 

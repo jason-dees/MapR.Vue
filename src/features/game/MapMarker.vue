@@ -11,7 +11,7 @@ export default {
     props: ['marker'],
     computed: {
         computedCss: function(){
-            var url = `${config.mapRFunctionsUrl}api/games/${this.marker.GameId}/maps/${this.marker.MapId}/markers/${this.marker.Id}/image`;
+            var url = `${config.mapRApi}games/${this.marker.GameId}/maps/${this.marker.MapId}/markers/${this.marker.Id}/image`;
             var backgroundImage = 'background-image: url("' + url + '?width=25&height=25");';
             return backgroundImage + this.marker.customCSS;
         }

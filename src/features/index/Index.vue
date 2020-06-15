@@ -1,6 +1,6 @@
 <template>
   <div>
-      <MapRNav v-bind:functionsUrl="config.mapRFunctionsUrl"
+      <MapRNav v-bind:functionsUrl="config.mapRApi"
               v-bind:appServerUrl="appServer"
               />
     <div id="app">
