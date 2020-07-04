@@ -21,6 +21,12 @@ let signalREvents = {
         fn: function(data){
             console.log("triggering SetGameAdmin", data);
         }
+    },
+    SetMap: {
+        name: 'SetMap',
+        fn: function(data) {
+            console.log("triggering SetMap", data);
+        }
     }
 }
 
@@ -32,17 +38,19 @@ let SetUpSignalREvents = (connection) => {
     connection.off(signalREvents.SetGameAdmin.name);
     connection.on(signalREvents.SetGameAdmin.name,
         signalREvents.SetGameAdmin.fn);
+    
+    connection.on(signalREvents.SetMap.name)
 };
 
 let SetUpSignalR = async (gameId) => {
     let connection = new signalR.HubConnectionBuilder()
-        .withUrl(config.mapRApi)
+        .withUrl(config.mapRApi + "/mapHub")
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    await connection.start();
+    await connection.start()
+    .then(function () { connection.invoke("AddToGame", gameId) });
     SetUpSignalREvents(connection);
-    await store.addToGame(gameId);
 };
 
 export { SetUpSignalR, SetUpSignalREvents };
