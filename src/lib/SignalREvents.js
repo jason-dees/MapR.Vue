@@ -27,6 +27,12 @@ let signalREvents = {
         fn: function(data) {
             console.log("triggering SetMap", data);
         }
+    },
+    SetAllMapMarkers: {
+        name: 'SetAllMapMarkers',
+        fn: function(data) {
+            console.log("triggering SetAllMapMarkers", data);
+        }
     }
 }
 
@@ -39,7 +45,13 @@ let SetUpSignalREvents = (connection) => {
     connection.on(signalREvents.SetGameAdmin.name,
         signalREvents.SetGameAdmin.fn);
     
-    connection.on(signalREvents.SetMap.name)
+    connection.off(signalREvents.SetMap.name);
+    connection.on(signalREvents.SetMap.name,
+        signalREvents.SetMap.fn)
+
+    connection.off(signalREvents.SetAllMapMarkers.name);
+    connection.on(signalREvents.SetAllMapMarkers.name,
+        signalREvents.SetMap.fn)
 };
 
 let SetUpSignalR = async (gameId) => {
