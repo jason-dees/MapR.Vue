@@ -1,4 +1,4 @@
-import mapRFunctions from './MapRFunctions.js'
+import mapRFunctions from './MockMapRFunctions.js'
 var defaultGame = {
     markers: {},
     markersArray: [],

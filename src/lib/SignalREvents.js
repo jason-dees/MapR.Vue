@@ -61,7 +61,8 @@ let SetUpSignalR = async (gameId) => {
         .build();
 
     await connection.start()
-    .then(function () { connection.invoke("AddToGame", gameId) });
+        .then(function () { connection.invoke("AddToGame", gameId) });
+
     SetUpSignalREvents(connection);
 };
 

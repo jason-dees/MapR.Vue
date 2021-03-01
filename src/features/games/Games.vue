@@ -1,5 +1,6 @@
 <template>
   <div>
+    games go here
     <ul id="example-1">
       <li v-for="game in gamesList" v-bind:key="game.id">
         <router-link v-bind:to="'/games/'+game.id">{{ game.name }}</router-link>
@@ -9,7 +10,7 @@
 </template>
 
 <script>
-import mapRFunctions from '../../lib/MapRFunctions.js'
+import mapRFunctions from '../../lib/MockMapRFunctions.js'
 
 export default {
   // props: {

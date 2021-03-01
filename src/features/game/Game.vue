@@ -11,8 +11,7 @@
 </template>
 
 <script>
-    import * as signalR from '@aspnet/signalr';
-    import {SetUpSignalR} from '../../lib/SignalREvents.js'
+    import {SetUpSignalR} from '../../lib/MockSignalREvents.js'
     import config from '../../../config.json';
     import { store } from '../../lib/store.js'
     import * as panzoom from 'panzoom';
