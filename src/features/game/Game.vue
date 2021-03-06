@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import {SetUpSignalR} from '../../lib/MockSignalREvents.js'
+    import {SetUpSignalR} from '../../lib/MockSignalRSetup.js'
     import config from '../../../config.json';
     import { store } from '../../lib/store.js'
     import * as panzoom from 'panzoom';
@@ -54,7 +54,8 @@
                 }
             });
             this.store.getGameData(self.id).then(async d => {
-                self.$set(self, 'imageUrl', config.mapRApi + 'games/'+ d.id + '/activemap/image');
+                console.log("mounted-> store.getGameData",d)
+                //self.$set(self, 'imageUrl', config.mapRApi + 'games/'+ d.id + '/activemap/image');
                 await self.connect(d.id);
             });
         },

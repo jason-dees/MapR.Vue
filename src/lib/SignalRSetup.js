@@ -2,7 +2,7 @@ import { store } from './store.js'
 import * as signalR from '@aspnet/signalr';
 import config from '../../config.json';
 
-let signalREvents = {
+let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
         fn: function(gameData){
@@ -37,21 +37,21 @@ let signalREvents = {
 }
 
 let SetUpSignalREvents = (connection) => {
-    connection.off(signalREvents.SetGameData.name);
-    connection.on(signalREvents.SetGameData.name,
-        signalREvents.SetGameData.fn);
+    connection.off(SignalREvents.SetGameData.name);
+    connection.on(SignalREvents.SetGameData.name,
+        SignalREvents.SetGameData.fn);
 
-    connection.off(signalREvents.SetGameAdmin.name);
-    connection.on(signalREvents.SetGameAdmin.name,
-        signalREvents.SetGameAdmin.fn);
+    connection.off(SignalREvents.SetGameAdmin.name);
+    connection.on(SignalREvents.SetGameAdmin.name,
+        SignalREvents.SetGameAdmin.fn);
     
-    connection.off(signalREvents.SetMap.name);
-    connection.on(signalREvents.SetMap.name,
-        signalREvents.SetMap.fn)
+    connection.off(SignalREvents.SetMap.name);
+    connection.on(SignalREvents.SetMap.name,
+        SignalREvents.SetMap.fn)
 
-    connection.off(signalREvents.SetAllMapMarkers.name);
-    connection.on(signalREvents.SetAllMapMarkers.name,
-        signalREvents.SetMap.fn)
+    connection.off(SignalREvents.SetAllMapMarkers.name);
+    connection.on(SignalREvents.SetAllMapMarkers.name,
+        SignalREvents.SetMap.fn)
 };
 
 let SetUpSignalR = async (gameId) => {
@@ -66,4 +66,4 @@ let SetUpSignalR = async (gameId) => {
     SetUpSignalREvents(connection);
 };
 
-export { SetUpSignalR, SetUpSignalREvents };
+export { SetUpSignalR, SetUpSignalREvents, SignalREvents };
