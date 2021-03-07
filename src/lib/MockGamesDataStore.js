@@ -71,18 +71,18 @@ let GamesData = {
     userName
 }
 
-let AddGame = function(gameData){}
+let AddGame = function (gameData) { }
 
-let UpdateGame = function(gameId, gameData){
+let UpdateGame = function (gameId, gameData) {
 }
 
-let AddMap = function(gameId, mapData){}
+let AddMap = function (gameId, mapData) { }
 
-let UpdateMap = function(gameId, mapId, mapData) {
+let UpdateMap = function (gameId, mapId, mapData) {
 }
 
-let AddMarker = function(gameId, mapId, markerData) {}
+let AddMarker = function (gameId, mapId, markerData) { }
 
-let UpdateMarker = function(gameId, mapId, markerId, markerData) {
+let UpdateMarker = function (gameId, mapId, markerId, markerData) {
 }
 export { GamesData, UpdateGame }

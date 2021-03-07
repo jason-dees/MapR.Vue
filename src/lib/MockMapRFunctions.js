@@ -1,28 +1,51 @@
-import {GamesData} from './MockGamesDataStore.js'
+import { GamesData } from './MockGamesDataStore.js'
+import { MapRLogger } from './Logger.js'
 
-var wrapInData = (obj) => {
+let wrapInData = (obj) => {
     return { 'data': obj }
+}
+var IsAdmin = true;
+
+function transformGameData(rawGame) {
+    if (IsAdmin) {
+        return {
+            ...rawGame.gameId,
+            ...rawGame.owner,
+            ...rawGame.name,
+            ...rawGame.maps,
+            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+        }
+    }
+    else {
+        return {
+            ...rawGame.gameId,
+            ...rawGame.owner,
+            ...rawGame.name,
+            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+        }
+    }
 }
 export default {
     async getUser() {
-        console.log("getting user")
+        MapRLogger.log("getting user")
         return wrapInData({
             'name': GamesData.userName
         });
     },
     async getGames() {
-        console.log("getting games")
+        MapRLogger.log("getting games")
         return wrapInData(GamesData.games);
     },
     async getGame(gameId) {
-        let game = GamesData.games.filter((g) => { return g.id == gameId})[0]
-        if(game == null){
-            console.log("did not find game "+ gameId);
+        let rawGame = GamesData.games.filter((g) => { return g.id == gameId })[0]
+        if (rawGame == null) {
+            MapRLogger.log("did not find game " + gameId);
+            return null;
         }
-        else{
-            console.log("found game "  + gameId);
+        else {
+            MapRLogger.log("found game " + gameId);
         }
-        return wrapInData(game);
+        return wrapInData(transformGameData(rawGame));
     },
     async negotiateSignalr() {
         return {}
@@ -32,5 +55,8 @@ export default {
     },
     async getMaps(gameId) {
         return {}
+    },
+    setAdmin(isAdmin) {
+        IsAdmin = isAdmin
     }
 }

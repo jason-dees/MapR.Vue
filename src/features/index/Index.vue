@@ -4,7 +4,6 @@
               v-bind:appServerUrl="appServer"
               />
     <div id="app">
-      index is here
       <router-view>
       this is the index
       </router-view>

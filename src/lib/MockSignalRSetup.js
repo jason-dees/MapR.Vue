@@ -1,27 +1,28 @@
-import {SignalREvents} from './SignalRSetup.js'
-import {GamesData} from './MockGamesDataStore.js'
+import { SignalREvents } from './SignalRSetup.js'
+import { GamesData } from './MockGamesDataStore.js'
+import { MapRLogger } from './Logger.js'
 
 export { SetUpSignalR };
 
 let methods = {};
 
 let mockServer = {
-    AddToGame: function(gameId) {
-        console.log("AddToGame", gameId);
+    AddToGame: function (gameId) {
+        MapRLogger.log("AddToGame", gameId);
         //SetGameData?
     }
 };
 
 let mockConnection = {
-    invoke: function(methodName, ...arg){
-        console.log("connection.invoke", ...arg);
+    invoke: function (methodName, ...arg) {
+        MapRLogger.log("connection.invoke", arguments);
         mockServer[methodName].bind(null, ...arg)();
 
     },
-    on: function(methodName, fn){
+    on: function (methodName, fn) {
         methods[methodName] = fn;
     },
-    off: function(methodName, fn){
+    off: function (methodName, fn) {
         methods[methodName] = null;
     }
 }
@@ -34,7 +35,7 @@ let SetUpSignalR = async (gameId) => {
     mockConnection.off(SignalREvents.SetGameAdmin.name);
     mockConnection.on(SignalREvents.SetGameAdmin.name,
         SignalREvents.SetGameAdmin.fn);
-    
+
     mockConnection.off(SignalREvents.SetMap.name);
     mockConnection.on(SignalREvents.SetMap.name,
         SignalREvents.SetMap.fn);

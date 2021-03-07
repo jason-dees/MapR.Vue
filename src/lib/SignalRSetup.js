@@ -5,32 +5,32 @@ import config from '../../config.json';
 let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
-        fn: function(gameData){
+        fn: function (gameData) {
             var markers = gameData.markers;
             console.log("triggering SetGameData", gameData);
 
             store.setIsOwner(gameData.isGameOwner);
 
-            for(var i = 0; i< markers.length; i++){
+            for (var i = 0; i < markers.length; i++) {
                 store.addOrUpdateMarker(markers[i]);
             }
         }
     },
     SetGameAdmin: {
         name: 'SetGameAdmin',
-        fn: function(data){
+        fn: function (data) {
             console.log("triggering SetGameAdmin", data);
         }
     },
     SetMap: {
         name: 'SetMap',
-        fn: function(data) {
+        fn: function (data) {
             console.log("triggering SetMap", data);
         }
     },
     SetAllMapMarkers: {
         name: 'SetAllMapMarkers',
-        fn: function(data) {
+        fn: function (data) {
             console.log("triggering SetAllMapMarkers", data);
         }
     }
@@ -44,7 +44,7 @@ let SetUpSignalREvents = (connection) => {
     connection.off(SignalREvents.SetGameAdmin.name);
     connection.on(SignalREvents.SetGameAdmin.name,
         SignalREvents.SetGameAdmin.fn);
-    
+
     connection.off(SignalREvents.SetMap.name);
     connection.on(SignalREvents.SetMap.name,
         SignalREvents.SetMap.fn)

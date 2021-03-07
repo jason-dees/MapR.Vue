@@ -1,4 +1,5 @@
 import mapRFunctions from './MockMapRFunctions.js'
+import { MapRLogger } from './Logger.js'
 var defaultGame = {
     markers: {},
     markersArray: [],
@@ -15,20 +16,20 @@ var store = {
         isOwner: false,
         game: defaultGame
     },
-    setPageTitle  (newTitle){
+    setPageTitle(newTitle) {
         this.state.title = newTitle;
     },
-    setUser (newUser){
+    setUser(newUser) {
         this.state.user = newUser;
     },
-    getUser(){
+    getUser() {
         var self = this;
         mapRFunctions.getUser().then((r) => {
-            if(r.data.name != null){
+            if (r.data.name != null) {
                 self.setUser(r.data.name);
                 self.state.loadedUserInfo = true;
             }
-            else{
+            else {
                 self.state.user = null;
                 self.state.loadedUserInfo = false;
             }
@@ -39,42 +40,42 @@ var store = {
             self.state.loadingUserInfo = false;
         });
     },
-    async getGameData(gameId){
+    async getGameData(gameId) {
         var gameData = (await mapRFunctions.getGame(gameId)).data;
         this.setPageTitle(gameData.name);
         this.state.game.maps = gameData.maps;
         return gameData;
     },
-    addToGame(gameId){
+    addToGame(gameId) {
         return mapRFunctions.addToGame(gameId);
     },
-    setGameData(data){
+    setGameData(data) {
         this.state.game.gameData = data;
     },
-    setIsOwner(isOwner){
+    setIsOwner(isOwner) {
         this.state.isOwner = isOwner;
     },
-    addOrUpdateMarker(marker){
-        console.log("adding marker", marker);
+    addOrUpdateMarker(marker) {
+        MapRLogger.log("adding marker", marker);
         this.state.game.markers[marker.Id] = marker;
         this.state.game.markersArray = [];
 
         //Keeping these in line will suck
-        for(var markerId in this.state.game.markers){
+        for (var markerId in this.state.game.markers) {
             this.state.game.markersArray.push(this.state.game.markers[markerId]);
         }
     },
-    resetGame(){
-        console.log("resetGame");
+    resetGame() {
+        MapRLogger.log("resetGame");
         this.setIsOwner(false);
         this.state.game = defaultGame;
     },
-    clearMarkers(){
-        console.log("clearing markers")
+    clearMarkers() {
+        MapRLogger.log("clearing markers")
         this.state.game.markers = {};
     },
-    isOnGamePage(){
+    isOnGamePage() {
         //maybe this to check whether it's on the game page rather than set a variable a whole bunch
     }
 };
-export {store}
+export { store }
