@@ -53,7 +53,19 @@ let games = [
                 'name': 'ABD123 Map 1',
                 'isActive': true,
                 'isPrimary': false,
-                'markers': []
+                'markers': [
+                    {
+                        'id': 'ABD123-1-1',
+                        'gameId': 'ABD123',
+                        'mapId': 'ABD123-1',
+                        'x': 1,
+                        'y': 2,
+                        'name': 'Some Name',
+                        'description': 'some longer text goes here',
+                        'customCss': '',
+                        'imageUri': 'some image uri'
+                    }
+                ]
             },
             {
                 'id': 'ABD123-2',
@@ -75,9 +87,14 @@ let GamesData = {
 
 let GamesDataStore = {
 
-    addGame: function (gameData) { },
+    addGame: function (gameData) {
+        GamesData.games.push(gameData);
+    },
 
-    getGame: (gameId) =>  GamesData.games.filter((g) => { return g.id == gameId })[0],
+    getGame: (gameId) => {
+        const game = GamesData.games.filter((g) => { return g.id == gameId })[0];
+        return game
+    },
     getGames: () => GamesData.games,
     updateGame: function (gameId, gameData) {
     },
@@ -98,6 +115,6 @@ let GamesDataStore = {
     getUser: function () {
         return { 'name': GamesData.userName }
     }
-} 
+}
 
-export {GamesDataStore}
+export { GamesDataStore }

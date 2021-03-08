@@ -5,7 +5,7 @@
     </div>
     <map-marker
       v-for="marker in state.game.markersArray"
-      v-bind:key="marker.Id"
+      v-bind:key="marker.id"
       v-bind:marker="marker"
     />
   </div>
@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     mapload: function () {
-      MapRLogger.log("map load");
       var self = this;
       self.setMarkersPosition(self.mapZoom, self.map);
     },
@@ -83,7 +82,8 @@ export default {
     },
     setMarkerPosition: function (marker, mapZoom, mapElement) {
       var mapTransform = mapZoom.getTransform();
-      var element = this.$el.querySelector("#" + marker.Id);
+      MapRLogger.log("Selecting for marker: ", marker.id)
+      var element = this.$el.querySelector("#" + marker.id);
       var markerX = marker.X,
         markerY = marker.Y,
         left =

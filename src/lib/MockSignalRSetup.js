@@ -1,15 +1,33 @@
 import { SignalREvents } from './SignalRSetup.js'
-import { GamesData } from './MockGamesDataStore.js'
+import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
 
 export { SetUpSignalR };
 
 let methods = {};
+let IsAdmin = true;
+
+function transformGameData(rawGame) {
+    if (IsAdmin) {
+        return {
+            ...rawGame,
+            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+        }
+    }
+    else {
+        return {
+            ...rawGame,
+            activeMap: rawGame.maps.filter(m => m.isActive)[0],
+            maps: null
+        }
+    }
+}
 
 let mockServer = {
     AddToGame: function (gameId) {
         MapRLogger.log("AddToGame", gameId);
-        //SetGameData?
+        const game = transformGameData(GamesDataStore.getGame(gameId));
+        methods[SignalREvents.SetGameData.name](game)
     }
 };
 

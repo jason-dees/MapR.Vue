@@ -6,8 +6,7 @@ let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
         fn: function (gameData) {
-            var markers = gameData.markers;
-            console.log("triggering SetGameData", gameData);
+            var markers = gameData.activeMap.markers;
 
             store.setIsOwner(gameData.isGameOwner);
 

@@ -1,5 +1,7 @@
 import mapRFunctions from './MockMapRFunctions.js'
 import { MapRLogger } from './Logger.js'
+
+//I want to refactor this
 var defaultGame = {
     markers: {},
     markersArray: [],
@@ -56,7 +58,6 @@ var store = {
         this.state.isOwner = isOwner;
     },
     addOrUpdateMarker(marker) {
-        MapRLogger.log("adding marker", marker);
         this.state.game.markers[marker.Id] = marker;
         this.state.game.markersArray = [];
 

@@ -10,22 +10,19 @@ var IsLoggedIn = true;
 function transformGameData(rawGame) {
     if (IsAdmin) {
         return {
-            ...rawGame.gameId,
-            ...rawGame.owner,
-            ...rawGame.name,
-            ...rawGame.maps,
+            ...rawGame,
             activeMap: rawGame.maps.filter(m => m.isActive)[0]
         }
     }
     else {
         return {
-            ...rawGame.gameId,
-            ...rawGame.owner,
-            ...rawGame.name,
-            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+            ...rawGame,
+            activeMap: rawGame.maps.filter(m => m.isActive)[0],
+            maps: null
         }
     }
 }
+
 export default {
     async getUser() {
         MapRLogger.log("getting user")
