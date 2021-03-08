@@ -35,6 +35,8 @@ marker
 }
 */
 
+import { MapRLogger } from "./Logger";
+
 let userName = 'Jason Dees';
 
 let games = [
@@ -71,18 +73,31 @@ let GamesData = {
     userName
 }
 
-let AddGame = function (gameData) { }
+let GamesDataStore = {
 
-let UpdateGame = function (gameId, gameData) {
-}
+    addGame: function (gameData) { },
 
-let AddMap = function (gameId, mapData) { }
+    getGame: (gameId) =>  GamesData.games.filter((g) => { return g.id == gameId })[0],
+    getGames: () => GamesData.games,
+    updateGame: function (gameId, gameData) {
+    },
 
-let UpdateMap = function (gameId, mapId, mapData) {
-}
+    addMap: function (gameId, mapData) { },
 
-let AddMarker = function (gameId, mapId, markerData) { }
+    getMap: function (gameId, mapId) { },
 
-let UpdateMarker = function (gameId, mapId, markerId, markerData) {
-}
-export { GamesData, UpdateGame }
+    updateMap: function (gameId, mapId, mapData) {
+    },
+
+    addMarker: function (gameId, mapId, markerData) { },
+
+    getMarker: function (gameId, mapId, markerId) { },
+
+    updateMarker: function (gameId, mapId, markerId, markerData) {
+    },
+    getUser: function () {
+        return { 'name': GamesData.userName }
+    }
+} 
+
+export {GamesDataStore}

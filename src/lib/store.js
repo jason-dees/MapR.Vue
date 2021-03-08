@@ -23,7 +23,7 @@ var store = {
         this.state.user = newUser;
     },
     getUser() {
-        var self = this;
+        const self = this;
         mapRFunctions.getUser().then((r) => {
             if (r.data.name != null) {
                 self.setUser(r.data.name);

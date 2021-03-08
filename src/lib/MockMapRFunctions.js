@@ -1,10 +1,11 @@
-import { GamesData } from './MockGamesDataStore.js'
+import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
 
 let wrapInData = (obj) => {
     return { 'data': obj }
 }
 var IsAdmin = true;
+var IsLoggedIn = true;
 
 function transformGameData(rawGame) {
     if (IsAdmin) {
@@ -28,22 +29,23 @@ function transformGameData(rawGame) {
 export default {
     async getUser() {
         MapRLogger.log("getting user")
-        return wrapInData({
-            'name': GamesData.userName
-        });
+        if (IsLoggedIn) {
+            return wrapInData(GamesDataStore.getUser());
+        }
+        return wrapInData({});
     },
     async getGames() {
         MapRLogger.log("getting games")
-        return wrapInData(GamesData.games);
+        return wrapInData(GamesDataStore.getGames());
     },
     async getGame(gameId) {
-        let rawGame = GamesData.games.filter((g) => { return g.id == gameId })[0]
+        let rawGame = GamesDataStore.getGame(gameId)
         if (rawGame == null) {
-            MapRLogger.log("did not find game " + gameId);
+            MapRLogger.debug("did not find game " + gameId);
             return null;
         }
         else {
-            MapRLogger.log("found game " + gameId);
+            MapRLogger.debug("found game " + gameId);
         }
         return wrapInData(transformGameData(rawGame));
     },
@@ -58,5 +60,8 @@ export default {
     },
     setAdmin(isAdmin) {
         IsAdmin = isAdmin
+    },
+    setIsLoggedIn(isLoggedIn) {
+        IsLoggedIn = isLoggedIn
     }
 }
