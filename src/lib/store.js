@@ -8,7 +8,15 @@ var defaultGame = {
     maps: {},
     gameData: null
 };
-var state = {
+var defaultMap = {
+    'id': '',
+    'gameId': '',
+    'imageUri': '',
+    'name': 'NA',
+    'isActive': false,
+    'isPrimary': false
+}
+var primaryState = {
     title: 'MapR',
     user: '',
     loadedUserInfo: false,
@@ -20,78 +28,103 @@ var state = {
         }
         return false;
     },
+    get primaryMap() {
+        if (this.game.gameData == null) {
+            return defaultMap;
+        }
+        return this.game.gameData.primaryMap;
+    },
+    get primaryMapUri() {
+        return this.primaryMap.imageUri
+    },
+    get primaryMapId() {
+        return this.primaryMap.id;
+    },
     game: defaultGame
 };
 var store = {
-    get state() { return state },
+    get state() { return primaryState },
     setPageTitle(newTitle) {
-        this.state.title = newTitle;
+        primaryState.title = newTitle;
     },
     setUser(newUser) {
-        this.state.user = newUser;
+        primaryState.user = newUser;
     },
     getUser() {
         const self = this;
         mapRFunctions.getUser().then((r) => {
             if (r.data.name != null) {
                 self.setUser(r.data.name);
-                state.loadedUserInfo = true;
+                primaryState.loadedUserInfo = true;
             }
             else {
-                state.user = null;
-                state.loadedUserInfo = false;
+                primaryState.user = null;
+                primaryState.loadedUserInfo = false;
             }
         }).catch((r) => {
-            state.user = null;
-            state.loadedUserInfo = false;
+            primaryState.user = null;
+            primaryState.loadedUserInfo = false;
         }).finally((r) => {
-            state.loadingUserInfo = false;
+            primaryState.loadingUserInfo = false;
         });
     },
     async getGameData(gameId) {
         var gameData = (await mapRFunctions.getGame(gameId)).data;
         this.setPageTitle(gameData.name);
-        state.game.maps = gameData.maps;
+        primaryState.game.maps = gameData.maps;
         return gameData;
     },
     addToGame(gameId) {
         return mapRFunctions.addToGame(gameId);
     },
     setGameData(data) {
-        state.game.gameData = data;
+        primaryState.game.gameData = data;
     },
-    addMarker(marker){
-        state.game.markers[marker.id] = marker;
-        state.game.markersArray = [];
+    setPrimaryMapGameData(mapData) {
+        primaryState.game.gameData.primaryMap = mapData;
+        primaryState.game.markers = {};
+        primaryState.game.markersArray = [];
+        var markers = mapData.markers;
+        for (var i = 0; i < markers.length; i++) {
+            this.addMarker(markers[i]);
+        }
+    },
+    addMarker(marker) {
+        primaryState.game.markers[marker.id] = marker;
+        primaryState.game.markersArray = [];
 
         //Keeping these in line will suck
-        for (var markerId in this.state.game.markers) {
-            this.state.game.markersArray.push(this.state.game.markers[markerId]);
+        for (var markerId in primaryState.game.markers) {
+            primaryState.game.markersArray.push(primaryState.game.markers[markerId]);
         }
     },
     updateMarker(marker) {
         this.addMarker(marker);
-        if(state.isOwner){
-            state.connection.invoke("MoveMarker", marker.id, marker.x, marker.y);
+        if (primaryState.isOwner) {
+            primaryState.connection.invoke("MoveMarker", marker.id, marker.x, marker.y);
         }
     },
+    changeMap(mapId) {
+        //Do an 'invoke'
+        primaryState.connection.invoke("ChangeMap", primaryState.game.gameData.id, mapId);
+    },
     resetGame() {
-        state.game = defaultGame;
+        primaryState.game = defaultGame;
     },
     clearMarkers() {
-        state.game.markers = {};
+        primaryState.game.markers = {};
     },
     isOnGamePage() {
         //maybe this to check whether it's on the game page rather than set a variable a whole bunch
     },
     getMarkerById(markerId) {
-        return state.game.markers[markerId];
+        return primaryState.game.markers[markerId];
     },
-    setConnection(connection){
-        state.connection = connection;
+    setConnection(connection) {
+        primaryState.connection = connection;
     },
     invoke(methodName, ...arg) {
-        state.connection.invoke(methodName, ...arg)
+        primaryState.connection.invoke(methodName, ...arg)
     }
 };
 export { store }

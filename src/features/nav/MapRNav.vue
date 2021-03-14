@@ -20,7 +20,7 @@
                                 v-for="map in sharedState.game.maps"
                                 v-bind:key="map.id"
                                 v-on:click="changeMap(map.id)"
-                                v-bind:class="{ active: map.isPrimary }">
+                                v-bind:class="{ active: sharedState.primaryMapId == map.id }">
                                 {{map.name}}
                             </span>
                         </div>
@@ -57,6 +57,7 @@
     </nav>
 </template>
 <script>
+import { MapRLogger } from '../../lib/Logger.js';
 import { store } from '../../lib/store.js';
 import NewMarkerModal from './NewMarkerModal.vue';
 
@@ -80,7 +81,7 @@ export default{
             window.location.href = this.googleUrl;
         },
         changeMap: function(mapId){
-
+            store.changeMap(mapId);
         }
     }
 }

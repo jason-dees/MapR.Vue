@@ -11,13 +11,13 @@ function transformGameData(rawGame) {
     if (IsAdmin) {
         return {
             ...rawGame,
-            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+            primaryMap: rawGame.maps.filter(m => m.isPrimary)[0]
         }
     }
     else {
         return {
             ...rawGame,
-            activeMap: rawGame.maps.filter(m => m.isActive)[0],
+            primaryMap: rawGame.maps.filter(m => m.isPrimary)[0],
             maps: null
         }
     }

@@ -11,13 +11,13 @@ function transformGameData(rawGame) {
     if (IsAdmin) {
         return {
             ...rawGame,
-            activeMap: rawGame.maps.filter(m => m.isActive)[0]
+            primaryMap: rawGame.maps.filter(m => m.isPrimary)[0]
         }
     }
     else {
         return {
             ...rawGame,
-            activeMap: rawGame.maps.filter(m => m.isActive)[0],
+            primaryMap: rawGame.maps.filter(m => m.isPrimary)[0],
             maps: null
         }
     }
@@ -28,7 +28,13 @@ let mockServer = {
         const game = transformGameData(GamesDataStore.getGame(gameId));
         methods[SignalREvents.SetGameData.name](game)
     },
-    MoveMarker: function(){}
+    MoveMarker: function(markerId, x, y){ 
+        MapRLogger.log("new Marker position for", markerId, x, y);
+     },
+    ChangeMap: function(gameId, mapId){
+        MapRLogger.log("Change Map for", gameId, "to", mapId);
+        mockConnection.trigger(SignalREvents.SetMap.name, GamesDataStore.getMap(gameId, mapId));
+    }
 };
 
 let mockConnection = {
@@ -42,6 +48,9 @@ let mockConnection = {
     },
     off: function (methodName, fn) {
         methods[methodName] = null;
+    },
+    trigger: function(methodName, ...arg){
+        methods[methodName](...arg)
     }
 }
 

@@ -7,7 +7,7 @@ let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
         fn: function (gameData) {
-            var markers = gameData.activeMap.markers;
+            var markers = gameData.primaryMap.markers;
             MapRLogger.log("gameData", gameData)
 
             for (var i = 0; i < markers.length; i++) {
@@ -25,6 +25,7 @@ let SignalREvents = {
         name: 'SetMap',
         fn: function (data) {
             console.log("triggering SetMap", data);
+            store.setPrimaryMapGameData(data);
         }
     },
     SetAllMapMarkers: {

@@ -101,7 +101,10 @@ let GamesDataStore = {
 
     addMap: function (gameId, mapData) { },
 
-    getMap: function (gameId, mapId) { },
+    getMap: function (gameId, mapId) { 
+        const game = this.getGame(gameId);
+        return game.maps.filter((m) => m.id == mapId)[0];
+    },
 
     updateMap: function (gameId, mapId, mapData) {
     },

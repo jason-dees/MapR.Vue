@@ -27,11 +27,9 @@ export default {
     "map-marker": MapMarker,
   },
   data: function () {
-    let self = this;
     return {
       store: store,
       state: store.state,
-      imageUrl: "",
       mapZoom: null,
     };
   },
@@ -39,6 +37,10 @@ export default {
     map: function () {
       return this.$el.querySelector(".map");
     },
+    imageUrl: function() {
+      MapRLogger.log("Getting ImageUrl", this.store.state.primaryMapUri);
+      return this.store.state.primaryMapUri;
+    }
   },
   mounted: function () {
     const self = this;
@@ -56,7 +58,6 @@ export default {
     });
     this.store.getGameData(self.id).then(async (gameData) => {
       //comes from server
-      self.$set(self, "imageUrl", gameData.activeMap.imageUri);
       self.store.setGameData(gameData);
       self.store.setConnection(await self.connect(gameData.id));
     });
@@ -69,7 +70,6 @@ export default {
     connect: async function (gameId) {
       const self = this;
       const connection = await SetUpSignalR(gameId);
-      MapRLogger.log("isOwner", self.state.isOwner)
       if (self.state.isOwner) {
         setUpMarkerDrag(document.querySelector("#mapVue"), self);
       }
