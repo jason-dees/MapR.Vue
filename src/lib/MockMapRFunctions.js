@@ -25,14 +25,12 @@ function transformGameData(rawGame) {
 
 export default {
     async getUser() {
-        MapRLogger.log("getting user")
         if (IsLoggedIn) {
             return wrapInData(GamesDataStore.getUser());
         }
         return wrapInData({});
     },
     async getGames() {
-        MapRLogger.log("getting games")
         return wrapInData(GamesDataStore.getGames());
     },
     async getGame(gameId) {

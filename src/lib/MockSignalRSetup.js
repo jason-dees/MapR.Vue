@@ -25,10 +25,10 @@ function transformGameData(rawGame) {
 
 let mockServer = {
     AddToGame: function (gameId) {
-        MapRLogger.log("AddToGame", gameId);
         const game = transformGameData(GamesDataStore.getGame(gameId));
         methods[SignalREvents.SetGameData.name](game)
-    }
+    },
+    MoveMarker: function(){}
 };
 
 let mockConnection = {
@@ -62,4 +62,6 @@ let SetUpSignalR = async (gameId) => {
     mockConnection.on(SignalREvents.SetAllMapMarkers.name,
         SignalREvents.SetMap.fn);
     mockConnection.invoke('AddToGame', gameId);
+    
+    return mockConnection;
 };

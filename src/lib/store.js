@@ -8,16 +8,22 @@ var defaultGame = {
     maps: {},
     gameData: null
 };
-var store = {
-    state: {
-        title: 'MapR',
-        user: '',
-        loadedUserInfo: false,
-        loadingUserInfo: true,
-        connection: null,
-        isOwner: false,
-        game: defaultGame
+var state = {
+    title: 'MapR',
+    user: '',
+    loadedUserInfo: false,
+    loadingUserInfo: true,
+    connection: null,
+    get isOwner() {
+        if (this.game != null && this.game.gameData != null) {
+            return this.game.gameData.owner == this.user
+        }
+        return false;
     },
+    game: defaultGame
+};
+var store = {
+    get state() { return state },
     setPageTitle(newTitle) {
         this.state.title = newTitle;
     },
@@ -29,54 +35,63 @@ var store = {
         mapRFunctions.getUser().then((r) => {
             if (r.data.name != null) {
                 self.setUser(r.data.name);
-                self.state.loadedUserInfo = true;
+                state.loadedUserInfo = true;
             }
             else {
-                self.state.user = null;
-                self.state.loadedUserInfo = false;
+                state.user = null;
+                state.loadedUserInfo = false;
             }
         }).catch((r) => {
-            self.state.user = null;
-            self.state.loadedUserInfo = false;
+            state.user = null;
+            state.loadedUserInfo = false;
         }).finally((r) => {
-            self.state.loadingUserInfo = false;
+            state.loadingUserInfo = false;
         });
     },
     async getGameData(gameId) {
         var gameData = (await mapRFunctions.getGame(gameId)).data;
         this.setPageTitle(gameData.name);
-        this.state.game.maps = gameData.maps;
+        state.game.maps = gameData.maps;
         return gameData;
     },
     addToGame(gameId) {
         return mapRFunctions.addToGame(gameId);
     },
     setGameData(data) {
-        this.state.game.gameData = data;
+        state.game.gameData = data;
     },
-    setIsOwner(isOwner) {
-        this.state.isOwner = isOwner;
-    },
-    addOrUpdateMarker(marker) {
-        this.state.game.markers[marker.Id] = marker;
-        this.state.game.markersArray = [];
+    addMarker(marker){
+        state.game.markers[marker.id] = marker;
+        state.game.markersArray = [];
 
         //Keeping these in line will suck
         for (var markerId in this.state.game.markers) {
             this.state.game.markersArray.push(this.state.game.markers[markerId]);
         }
     },
+    updateMarker(marker) {
+        this.addMarker(marker);
+        if(state.isOwner){
+            state.connection.invoke("MoveMarker", marker.id, marker.x, marker.y);
+        }
+    },
     resetGame() {
-        MapRLogger.log("resetGame");
-        this.setIsOwner(false);
-        this.state.game = defaultGame;
+        state.game = defaultGame;
     },
     clearMarkers() {
-        MapRLogger.log("clearing markers")
-        this.state.game.markers = {};
+        state.game.markers = {};
     },
     isOnGamePage() {
         //maybe this to check whether it's on the game page rather than set a variable a whole bunch
+    },
+    getMarkerById(markerId) {
+        return state.game.markers[markerId];
+    },
+    setConnection(connection){
+        state.connection = connection;
+    },
+    invoke(methodName, ...arg) {
+        state.connection.invoke(methodName, ...arg)
     }
 };
 export { store }

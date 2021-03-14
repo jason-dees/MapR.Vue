@@ -1,17 +1,17 @@
 import { store } from './store.js'
 import * as signalR from '@aspnet/signalr';
 import config from '../../config.json';
+import { MapRLogger } from './Logger.js';
 
 let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
         fn: function (gameData) {
             var markers = gameData.activeMap.markers;
-
-            store.setIsOwner(gameData.isGameOwner);
+            MapRLogger.log("gameData", gameData)
 
             for (var i = 0; i < markers.length; i++) {
-                store.addOrUpdateMarker(markers[i]);
+                store.addMarker(markers[i]);
             }
         }
     },

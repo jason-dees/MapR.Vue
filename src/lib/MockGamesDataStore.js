@@ -49,7 +49,7 @@ let games = [
             {
                 'id': 'ABD123-1',
                 'gameId': 'ABD123',
-                'imageUri': 'https://images-na.ssl-images-amazon.com/images/I/71RgfIeTq6L._SL1148_.jpg',
+                'imageUri': require('../assets/india_map.jpg'),
                 'name': 'ABD123 Map 1',
                 'isActive': true,
                 'isPrimary': false,
@@ -70,7 +70,7 @@ let games = [
             {
                 'id': 'ABD123-2',
                 'gameId': 'ABD123',
-                'imageUri': 'https://www.nationsonline.org/maps/Italy-Political-Map.jpg',
+                'imageUri':  require('../assets/Italy-Political-Map.jpg'),
                 'name': 'ABD123 Map 2',
                 'isActive': true,
                 'isPrimary': true,

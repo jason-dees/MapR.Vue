@@ -41,7 +41,7 @@ export default {
     },
   },
   mounted: function () {
-    var self = this;
+    const self = this;
     self.store.resetGame();
     self.mapZoom = panzoom(self.map, {
       maxZoom: 1,
@@ -55,26 +55,28 @@ export default {
       }
     });
     this.store.getGameData(self.id).then(async (gameData) => {
-      MapRLogger.log("mounted-> store.getGameData", gameData);
       //comes from server
       self.$set(self, "imageUrl", gameData.activeMap.imageUri);
-      await self.connect(gameData.id);
+      self.store.setGameData(gameData);
+      self.store.setConnection(await self.connect(gameData.id));
     });
   },
   methods: {
     mapload: function () {
-      var self = this;
+      const self = this;
       self.setMarkersPosition(self.mapZoom, self.map);
     },
     connect: async function (gameId) {
-      var self = this;
-      await SetUpSignalR(gameId);
+      const self = this;
+      const connection = await SetUpSignalR(gameId);
+      MapRLogger.log("isOwner", self.state.isOwner)
       if (self.state.isOwner) {
         setUpMarkerDrag(document.querySelector("#mapVue"), self);
       }
+      return connection;
     },
     setMarkersPosition: function (mapZoom, mapElement) {
-      var self = this;
+      const self = this;
       var markers = self.state.game.markers;
       for (var marker in markers) {
         self.setMarkerPosition(markers[marker], self.mapZoom, self.map);
@@ -82,10 +84,9 @@ export default {
     },
     setMarkerPosition: function (marker, mapZoom, mapElement) {
       var mapTransform = mapZoom.getTransform();
-      MapRLogger.log("Selecting for marker: ", marker.id)
       var element = this.$el.querySelector("#" + marker.id);
-      var markerX = marker.X,
-        markerY = marker.Y,
+      var markerX = marker.x,
+        markerY = marker.y,
         left =
           mapTransform.scale * markerX + mapTransform.x + mapElement.offsetLeft,
         top =
@@ -144,20 +145,15 @@ function setUpMarkerDrag(container, mapRApp) {
     if (active) {
       inElementX = currentX;
       inElementY = currentY;
-      var marker = mapRApp.state.game.markers[dragItem.id];
+      var marker = mapRApp.store.getMarkerById(dragItem.id);
 
-      marker.X =
+      marker.x =
         (inElementX - mapTransform.x - mapRApp.map.offsetLeft) /
         mapTransform.scale;
-      marker.Y =
+      marker.y =
         (inElementY - mapTransform.y - mapRApp.map.offsetTop) /
         mapTransform.scale;
-      // //THIS NEEDS TO BE FIXED PROBABLY
-      // mapRApp.connection.invoke("MoveMarker",
-      //   dragItem.id,
-      //   mapRApp.markers[dragItem.id].x,
-      //   mapRApp.markers[dragItem.id].y);
-      mapRApp.store.addOrUpdateMarker(marker);
+      mapRApp.store.updateMarker(marker);
 
       active = false;
     }
