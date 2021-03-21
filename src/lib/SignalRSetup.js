@@ -8,7 +8,6 @@ let SignalREvents = {
         name: "SetGameData",
         fn: function (gameData) {
             var markers = gameData.primaryMap.markers;
-            MapRLogger.log("gameData", gameData)
 
             for (var i = 0; i < markers.length; i++) {
                 store.addMarker(markers[i]);
@@ -18,13 +17,11 @@ let SignalREvents = {
     SetGameAdmin: {
         name: 'SetGameAdmin',
         fn: function (data) {
-            console.log("triggering SetGameAdmin", data);
         }
     },
     SetMap: {
         name: 'SetMap',
         fn: function (data) {
-            console.log("triggering SetMap", data);
             store.setPrimaryMapGameData(data);
         }
     },

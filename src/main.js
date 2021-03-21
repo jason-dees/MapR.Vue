@@ -8,9 +8,9 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 const routes = [
-  { path: '/games', component: Games, props: true },
-  { path: '/', component: Games, props: true },
-  { path: '/games/:id', component: Game, props: true },
+  { path: '/games', name: 'games', component: Games, props: true },
+  { path: '/', name: 'home', component: Games, props: true },
+  { path: '/games/:id', name:'game', component: Game, props: true },
 ];
 const router = new VueRouter({
   routes // short for `routes: routes`

@@ -6,7 +6,8 @@ var defaultGame = {
     markers: {},
     markersArray: [],
     maps: {},
-    gameData: null
+    gameData: null,
+    isAdmin: true
 };
 var defaultMap = {
     'id': '',
@@ -44,6 +45,9 @@ var primaryState = {
 };
 var store = {
     get state() { return primaryState },
+    invertIsAdmin() {
+        primaryState.isAdmin = !primaryState.isAdmin
+    },
     setPageTitle(newTitle) {
         primaryState.title = newTitle;
     },
