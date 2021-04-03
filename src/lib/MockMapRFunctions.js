@@ -1,3 +1,4 @@
+import { store } from './store.js'
 import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
 
@@ -8,7 +9,7 @@ var IsAdmin = true;
 var IsLoggedIn = true;
 
 function transformGameData(rawGame) {
-    if (IsAdmin) {
+    if (store.state.isAdmin) {
         return {
             ...rawGame,
             primaryMap: rawGame.maps.filter(m => m.isPrimary)[0]
@@ -52,11 +53,5 @@ export default {
     },
     async getMaps(gameId) {
         return {}
-    },
-    setAdmin(isAdmin) {
-        IsAdmin = isAdmin
-    },
-    setIsLoggedIn(isLoggedIn) {
-        IsLoggedIn = isLoggedIn
-    }
+    }   
 }

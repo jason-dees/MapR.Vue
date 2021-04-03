@@ -1,13 +1,11 @@
 import mapRFunctions from './MockMapRFunctions.js'
-import { MapRLogger } from './Logger.js'
 
 //I want to refactor this
 var defaultGame = {
     markers: {},
     markersArray: [],
     maps: {},
-    gameData: null,
-    isAdmin: true
+    gameData: null
 };
 var defaultMap = {
     'id': '',
@@ -41,13 +39,13 @@ var primaryState = {
     get primaryMapId() {
         return this.primaryMap.id;
     },
-    game: defaultGame
+    game: defaultGame,
+    isAdmin: false,
+    isDemo: true
 };
-var store = {
+    
+const store = {
     get state() { return primaryState },
-    invertIsAdmin() {
-        primaryState.isAdmin = !primaryState.isAdmin
-    },
     setPageTitle(newTitle) {
         primaryState.title = newTitle;
     },
@@ -131,4 +129,5 @@ var store = {
         primaryState.connection.invoke(methodName, ...arg)
     }
 };
+
 export { store }

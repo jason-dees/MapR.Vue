@@ -2,8 +2,6 @@ import { SignalREvents } from './SignalRSetup.js'
 import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
 
-export { SetUpSignalR };
-
 let methods = {};
 let IsAdmin = true;
 
@@ -74,3 +72,5 @@ let SetUpSignalR = async (gameId) => {
     
     return mockConnection;
 };
+
+export { SetUpSignalR };

@@ -1,4 +1,5 @@
 
+import { store } from './store.js'
 /*
 user
 { 'name': 'User Name' }
@@ -35,14 +36,14 @@ marker
 }
 */
 
-import { MapRLogger } from "./Logger";
 
-let userName = 'Jason Dees';
+let adminUserName = 'Jason Dees';
+let userName = 'Not Jason Dees';
 
 let games = [
     {
         'id': 'ABD123',
-        'owner': userName,
+        'owner': adminUserName,
         'name': 'Fake Game 0',
         'isPrivate': false,
         'maps': [
@@ -116,7 +117,10 @@ let GamesDataStore = {
     updateMarker: function (gameId, mapId, markerId, markerData) {
     },
     getUser: function () {
-        return { 'name': GamesData.userName }
+        if(store.state.isAdmin){
+            return { 'name': adminUserName }
+        }
+        return { 'name': userName }
     }
 }
 
