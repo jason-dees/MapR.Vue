@@ -40,7 +40,7 @@ var primaryState = {
         return this.primaryMap.id;
     },
     game: defaultGame,
-    isAdmin: false,
+    isAdmin: true,
     isDemo: true
 };
     

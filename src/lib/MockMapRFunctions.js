@@ -24,7 +24,7 @@ function transformGameData(rawGame) {
     }
 }
 
-export default {
+let mockFunctions = {
     async getUser() {
         if (IsLoggedIn) {
             return wrapInData(GamesDataStore.getUser());
@@ -55,3 +55,5 @@ export default {
         return {}
     }   
 }
+
+export default mockFunctions

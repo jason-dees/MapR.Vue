@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from './store.js'
+import mockFunctions from '../../lib/MockMapRFunctions.js'
 import config from '../../config.json';
 
 const getInstance = function(){
@@ -7,8 +9,8 @@ const getInstance = function(){
         withCredentials: true
     });
 }
-
-export default {
+ 
+let functions = {
     async getUser(){
        return await getInstance().get(`/account/user`);
     },
@@ -27,4 +29,10 @@ export default {
     async getMaps(gameId){
         return await getInstance().get(`games/${gameId}/maps`);
     }
+}
+if(store.state.isDemo) {
+    export default mockFunctions
+}
+else{
+export default functions
 }
