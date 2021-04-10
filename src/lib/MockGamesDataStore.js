@@ -99,7 +99,12 @@ let GamesDataStore = {
     getGames: () => GamesData.games,
     updateGame: function (gameId, gameData) {
     },
-
+    setPrimaryMap: function (gameId, newMapId) {
+        const game = GamesData.games.filter((g) => { return g.id == gameId })[0];
+        game.maps.forEach( m => m.isPrimary = false);
+        game.maps.filter( m => m.id == newMapId)[0].isPrimary = true;
+        console.log(GamesData.games)
+    },
     addMap: function (gameId, mapData) { },
 
     getMap: function (gameId, mapId) { 

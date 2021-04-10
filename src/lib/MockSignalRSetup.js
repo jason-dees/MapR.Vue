@@ -31,6 +31,7 @@ let mockServer = {
      },
     ChangeMap: function(gameId, mapId){
         MapRLogger.log("Change Map for", gameId, "to", mapId);
+        GamesDataStore.setPrimaryMap(gameId, mapId);
         mockConnection.trigger(SignalREvents.SetMap.name, GamesDataStore.getMap(gameId, mapId));
     }
 };

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import store from './store.js'
-import mockFunctions from '../../lib/MockMapRFunctions.js'
+import { store } from './store.js';
+import mockFunctions from './MockMapRFunctions.js'
 import config from '../../config.json';
 
 const getInstance = function(){
@@ -10,7 +10,7 @@ const getInstance = function(){
     });
 }
  
-let functions = {
+var functions = {
     async getUser(){
        return await getInstance().get(`/account/user`);
     },
@@ -31,8 +31,6 @@ let functions = {
     }
 }
 if(store.state.isDemo) {
-    export default mockFunctions
+    functions = mockFunctions
 }
-else{
 export default functions
-}

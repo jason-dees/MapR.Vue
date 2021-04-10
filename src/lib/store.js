@@ -112,6 +112,7 @@ const store = {
     },
     resetGame() {
         primaryState.game = defaultGame;
+        console.log('reset game', primaryState.game.markersArray)
     },
     clearMarkers() {
         primaryState.game.markers = {};

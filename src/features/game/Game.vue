@@ -45,6 +45,7 @@ export default {
   mounted: function () {
     const self = this;
     self.store.resetGame();
+    console.log(self.id)
     self.mapZoom = panzoom(self.map, {
       maxZoom: 1,
       smoothScroll: false,
@@ -57,9 +58,13 @@ export default {
       }
     });
     this.store.getGameData(self.id).then(async (gameData) => {
-      //comes from server
       self.store.setGameData(gameData);
-      self.store.setConnection(await self.connect(gameData.id));
+      if(store.state.connection == null) {
+        self.store.setConnection(await self.connect(gameData.id));
+      }
+      if (self.state.isOwner) {
+        setUpMarkerDrag(document.querySelector("#mapVue"), self);
+      }
     });
   },
   methods: {
@@ -68,14 +73,9 @@ export default {
       self.setMarkersPosition(self.mapZoom, self.map);
     },
     connect: async function (gameId) {
-      const self = this;
-      const connection = await SetUpSignalR(gameId);
-      if (self.state.isOwner) {
-        setUpMarkerDrag(document.querySelector("#mapVue"), self);
-      }
-      return connection;
+      return await SetUpSignalR(gameId);
     },
-    setMarkersPosition: function (mapZoom, mapElement) {
+    setMarkersPosition: function () {
       const self = this;
       var markers = self.state.game.markers;
       for (var marker in markers) {

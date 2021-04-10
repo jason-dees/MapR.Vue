@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import mapRFunctions from '../../lib/MockMapRFunctions.js'
+import mapRFunctions from '../../lib/MapRFunctions.js'
 import { store } from '../../lib/store.js';
 
 export default {
