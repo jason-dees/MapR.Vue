@@ -6,6 +6,7 @@
 <script>
 import 'bootstrap'
 import $ from 'jquery'
+
 export default {
     name: 'map-marker',
     props: ['marker'],
