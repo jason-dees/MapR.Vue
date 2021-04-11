@@ -4,6 +4,8 @@
 </template>
 
 <script>
+import 'bootstrap'
+import $ from 'jquery'
 export default {
     name: 'map-marker',
     props: ['marker'],
@@ -14,12 +16,12 @@ export default {
             return backgroundImage + this.marker.customCSS;
         }
     },
-    mounted:function(){
-        // $('#' + this.marker.id).popover({
-        //     container:'body',
-        //     content: this.marker.description || "",
-        //     title: this.marker.name
-        // });
+    mounted: function(){
+        $('#' + this.marker.id).popover({
+            container:'body',
+            content: this.marker.description || "",
+            title: this.marker.name
+        });
     }
 }
 </script>
