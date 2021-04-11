@@ -17,6 +17,8 @@ import { MapRLogger } from "../../lib/Logger.js";
 import { store } from "../../lib/store.js";
 import * as panzoom from "panzoom";
 import MapMarker from "./MapMarker.vue";
+import 'bootstrap'
+import $ from 'jquery'
 
 export default {
   name: "Game",
@@ -145,15 +147,19 @@ function setUpMarkerDrag(container, mapRApp) {
     if (active) {
       inElementX = currentX;
       inElementY = currentY;
+
       var marker = mapRApp.store.getMarkerById(dragItem.id);
 
-      marker.x =
-        (inElementX - mapTransform.x - mapRApp.map.offsetLeft) /
+      let newX = (inElementX - mapTransform.x - mapRApp.map.offsetLeft) /
         mapTransform.scale;
-      marker.y =
-        (inElementY - mapTransform.y - mapRApp.map.offsetTop) /
+      let newY = (inElementY - mapTransform.y - mapRApp.map.offsetTop) /
         mapTransform.scale;
-      mapRApp.store.updateMarker(marker);
+
+      if(newX != marker.x || newY != marker.y) {
+        marker.x = newX;
+        marker.y = newY;
+        mapRApp.store.updateMarker(marker);
+      }
 
       active = false;
     }
@@ -175,7 +181,7 @@ function setUpMarkerDrag(container, mapRApp) {
   }
 
   function setTranslate(xPos, yPos, el) {
-    //$(el).popover('update');
+    $(el).popover('hide');
     let transformValue =
       "matrix(" +
       mapTransform.scale +
