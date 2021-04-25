@@ -1,4 +1,4 @@
-import { SignalREvents } from './SignalRSetup.js'
+import { SignalREvents } from './SignalREvents'
 import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
 

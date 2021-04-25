@@ -1,39 +1,9 @@
-import { store } from './store.js'
 import * as signalR from '@aspnet/signalr';
+import { SignalREvents } from './SignalREvents'
+import mockSignalRSetup from './MockSignalRSetup'
 import config from '../../config.json';
-import { MapRLogger } from './Logger.js';
 
-let SignalREvents = {
-    SetGameData: {
-        name: "SetGameData",
-        fn: function (gameData) {
-            var markers = gameData.primaryMap.markers;
-
-            for (var i = 0; i < markers.length; i++) {
-                store.addMarker(markers[i]);
-            }
-        }
-    },
-    SetGameAdmin: {
-        name: 'SetGameAdmin',
-        fn: function (data) {
-        }
-    },
-    SetMap: {
-        name: 'SetMap',
-        fn: function (data) {
-            store.setPrimaryMapGameData(data);
-        }
-    },
-    SetAllMapMarkers: {
-        name: 'SetAllMapMarkers',
-        fn: function (data) {
-            console.log("triggering SetAllMapMarkers", data);
-        }
-    }
-}
-
-let SetUpSignalREvents = (connection) => {
+let setUpSignalREvents = (connection) => {
     connection.off(SignalREvents.SetGameData.name);
     connection.on(SignalREvents.SetGameData.name,
         SignalREvents.SetGameData.fn);
@@ -51,7 +21,7 @@ let SetUpSignalREvents = (connection) => {
         SignalREvents.SetMap.fn)
 };
 
-let SetUpSignalR = async (gameId) => {
+var SetUpSignalR = async (gameId) => {
     let connection = new signalR.HubConnectionBuilder()
         .withUrl(config.mapRApi + "/mapHub")
         .configureLogging(signalR.LogLevel.Information)
@@ -60,7 +30,11 @@ let SetUpSignalR = async (gameId) => {
     await connection.start()
         .then(function () { connection.invoke("AddToGame", gameId) });
 
-    SetUpSignalREvents(connection);
+    setUpSignalREvents(connection);
 };
 
-export { SetUpSignalR, SetUpSignalREvents, SignalREvents };
+if(config.isDemo) {
+    SetUpSignalR = mockSignalRSetup
+}
+
+export { SetUpSignalR }

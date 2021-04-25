@@ -1,4 +1,6 @@
 import mapRFunctions from './MockMapRFunctions.js'
+import 'bootstrap'
+import $ from 'jquery'
 
 //I want to refactor this
 var defaultGame = {
@@ -41,7 +43,6 @@ var primaryState = {
     },
     game: defaultGame,
     isAdmin: true,
-    isDemo: true
 };
     
 const store = {
@@ -108,17 +109,12 @@ const store = {
     },
     changeMap(mapId) {
         //Do an 'invoke'
+        $('.marker').popover('hide')
         primaryState.connection.invoke("ChangeMap", primaryState.game.gameData.id, mapId);
     },
     resetGame() {
         primaryState.game = defaultGame;
         console.log('reset game', primaryState.game.markersArray)
-    },
-    clearMarkers() {
-        primaryState.game.markers = {};
-    },
-    isOnGamePage() {
-        //maybe this to check whether it's on the game page rather than set a variable a whole bunch
     },
     getMarkerById(markerId) {
         return primaryState.game.markers[markerId];

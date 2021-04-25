@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { store } from './store.js';
 import mockFunctions from './MockMapRFunctions.js'
 import config from '../../config.json';
 
@@ -30,7 +29,7 @@ var functions = {
         return await getInstance().get(`games/${gameId}/maps`);
     }
 }
-if(store.state.isDemo) {
+if(config.isDemo) {
     functions = mockFunctions
 }
 export default functions

@@ -1,3 +1,4 @@
 {
-    "mapRApi": "https://localhost:5001"
+    "mapRApi": "https://localhost:5001",
+    "isDemo": true
 }

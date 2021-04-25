@@ -54,10 +54,7 @@ export default {
       minZoom: 0.1,
     });
     self.mapZoom.on("transform", function () {
-      var markers = self.state.game.markers;
-      for (var marker in markers) {
-        self.setMarkerPosition(markers[marker], self.mapZoom, self.map);
-      }
+      self.setMarkersPosition();
     });
     this.store.getGameData(self.id).then(async (gameData) => {
       self.store.setGameData(gameData);
@@ -86,6 +83,7 @@ export default {
     },
     setMarkerPosition: function (marker, mapZoom, mapElement) {
       var mapTransform = mapZoom.getTransform();
+      $('#' + marker.id).popover('hide');
       var element = this.$el.querySelector("#" + marker.id);
       var markerX = marker.x,
         markerY = marker.y,
