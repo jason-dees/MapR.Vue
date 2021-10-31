@@ -45,7 +45,7 @@ let mockConnection = {
     on: function (methodName, fn) {
         methods[methodName] = fn;
     },
-    off: function (methodName, fn) {
+    off: function (methodName) {
         methods[methodName] = null;
     },
     trigger: function(methodName, ...arg){

@@ -13,7 +13,7 @@ let SignalREvents = {
     },
     SetGameAdmin: {
         name: 'SetGameAdmin',
-        fn: function (data) {
+        fn: function () {
         }
     },
     SetMap: {

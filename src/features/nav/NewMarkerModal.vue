@@ -24,7 +24,7 @@
                         <label for="">Description</label>
                         <textarea class="form-control" rows="3" v-model="description"></textarea>
                     </div>
-                    <image-upload v-bind:image.sync="imageData"></image-upload>
+                    <image-upload v-model:image="imageData"></image-upload>
                     <div class="alert alert-warning" v-show="formErrorMessage.length > 0">{{formErrorMessage}}</div>
                 </div>
                 <div class="modal-footer">

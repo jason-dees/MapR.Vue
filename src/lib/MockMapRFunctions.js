@@ -5,7 +5,6 @@ import { MapRLogger } from './Logger.js'
 let wrapInData = (obj) => {
     return { 'data': obj }
 }
-var IsAdmin = true;
 var IsLoggedIn = true;
 
 function transformGameData(rawGame) {
@@ -48,10 +47,10 @@ let mockFunctions = {
     async negotiateSignalr() {
         return {}
     },
-    async addToGame(gameId) {
+    async addToGame() {
         return {}
     },
-    async getMaps(gameId) {
+    async getMaps() {
         return {}
     }   
 }

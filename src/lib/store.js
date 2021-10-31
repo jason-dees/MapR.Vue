@@ -64,10 +64,10 @@ const store = {
                 primaryState.user = null;
                 primaryState.loadedUserInfo = false;
             }
-        }).catch((r) => {
+        }).catch(() => {
             primaryState.user = null;
             primaryState.loadedUserInfo = false;
-        }).finally((r) => {
+        }).finally(() => {
             primaryState.loadingUserInfo = false;
         });
     },

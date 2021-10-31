@@ -57,7 +57,6 @@
     </nav>
 </template>
 <script>
-import { MapRLogger } from '../../lib/Logger.js';
 import { store } from '../../lib/store.js';
 import NewMarkerModal from './NewMarkerModal.vue';
 
