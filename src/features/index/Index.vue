@@ -4,20 +4,18 @@
               v-bind:appServerUrl="appServer"
               />
     <div id="app">
-      <router-view>
-      this is the index
-      </router-view>
-      </div>
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
 import MapRNav from '../nav/MapRNav.vue'
 import { store } from '../../lib/store.js'
-const config = require('../../../config.json')
+import config from '../../../config.json'
 
 export default {
-  name: 'index',
+  name: 'MaprIndex',
   data: function() {
     store.getUser();
     return  {

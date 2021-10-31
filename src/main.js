@@ -3,11 +3,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Index from './features/index/Index.vue'
 import Game from './features/game/Game.vue'
 import Games from './features/games/Games.vue'
-import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const routes = [
-  { path: '/games', name: 'games', component: Games, props: true },
-  { path: '/', name: 'home', component: Games, props: true },
+  { path: '/games', name: 'games', component: Games },
+  { path: '/', name: 'home', component: Games },
   { path: '/games/:id', name:'game', component: Game, props: true },
 ];
 const router = createRouter({
@@ -17,3 +18,4 @@ const router = createRouter({
 const app = createApp(Index)
 app.use(router)
 app.mount('#app')
+window.r = router

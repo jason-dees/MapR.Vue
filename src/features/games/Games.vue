@@ -14,22 +14,19 @@ import mapRFunctions from '../../lib/MapRFunctions.js'
 import { store } from '../../lib/store.js';
 
 export default {
-  // props: {
-  //   gamesList: Array
-  // },
+  name: "AvailableGames", 
   data: function(){
     let self = this;
     store.resetGame();
     mapRFunctions.getGames().then(r => {
-      self.$set(self, 'gamesList', r.data);
+      console.log(r,self)
+      self.gamesList = r.data
     })
-    .catch(() => {})
+    .catch((e) => {console.log(e)})
     .finally(() =>{})
     return {
       gamesList: []
     };
-  },
-  components: {
   }
 }
 </script>

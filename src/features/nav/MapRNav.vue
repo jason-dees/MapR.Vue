@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <router-link to="/" class="nav-link">Home</router-link>
+                <router-link :to="{ 'name': 'home'}" class="nav-link">Home</router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/games" class="nav-link">Games</router-link>
