@@ -1,4 +1,4 @@
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 import { SignalREvents } from './SignalREvents'
 import mockSignalRSetup from './MockSignalRSetup'
 import config from '../../config.json';

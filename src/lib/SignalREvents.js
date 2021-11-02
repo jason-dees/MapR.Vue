@@ -1,13 +1,12 @@
-import { store } from './store.js'
+import { store } from './VuexStore'
 
 let SignalREvents = {
     SetGameData: {
         name: "SetGameData",
         fn: function (gameData) {
             var markers = gameData.primaryMap.markers;
-
             for (var i = 0; i < markers.length; i++) {
-                store.addMarker(markers[i]);
+                store.commit('addMarker',markers[i]);
             }
         }
     },
@@ -19,7 +18,7 @@ let SignalREvents = {
     SetMap: {
         name: 'SetMap',
         fn: function (data) {
-            store.setPrimaryMapGameData(data);
+            store.commit('setPrimaryMapGameData', data);
         }
     },
     SetAllMapMarkers: {

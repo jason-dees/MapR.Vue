@@ -11,13 +11,12 @@
 
 <script>
 import MapRNav from '../nav/MapRNav.vue'
-import { store } from '../../lib/store.js'
 import config from '../../../config.json'
 
 export default {
   name: 'MaprIndex',
   data: function() {
-    store.getUser();
+    this.$store.dispatch('getUser')
     return  {
       games: [],
       activeGame: null,

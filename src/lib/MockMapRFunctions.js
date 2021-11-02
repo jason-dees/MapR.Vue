@@ -1,6 +1,6 @@
-import { store } from './store.js'
 import { GamesDataStore } from './MockGamesDataStore.js'
 import { MapRLogger } from './Logger.js'
+import { useStore } from 'vuex'
 
 let wrapInData = (obj) => {
     return { 'data': obj }
@@ -8,6 +8,7 @@ let wrapInData = (obj) => {
 var IsLoggedIn = true;
 
 function transformGameData(rawGame) {
+    const store = useStore();
     if (store.state.isAdmin) {
         return {
             ...rawGame,

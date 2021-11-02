@@ -1,5 +1,5 @@
 
-import { store } from './store.js'
+import { useStore } from 'vuex'
 /*
 user
 { 'name': 'User Name' }
@@ -103,7 +103,6 @@ let GamesDataStore = {
         const game = GamesData.games.filter((g) => { return g.id == gameId })[0];
         game.maps.forEach( m => m.isPrimary = false);
         game.maps.filter( m => m.id == newMapId)[0].isPrimary = true;
-        console.log(GamesData.games)
     },
     addMap: function (gameId, mapData) { },
 
@@ -122,6 +121,7 @@ let GamesDataStore = {
     updateMarker: function (gameId, mapId, markerId, markerData) {
     },
     getUser: function () {
+        const store = useStore();
         if(store.state.isAdmin){
             return { 'name': adminUserName }
         }
